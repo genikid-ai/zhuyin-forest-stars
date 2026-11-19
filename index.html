@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>注音符號 挑戰・森林小動物集星星</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="font-sans">
+  <!-- 全螢幕背景容器（自動等比縮放 16:9 舞台） -->
+  <div id="viewport" class="viewport">
+    <div id="stage" class="stage" role="application" aria-label="森林小動物集星星注音小遊戲">
+
+      <!-- ==================== 共用森林故事背景 ==================== -->
+      <div class="forest-bg" aria-hidden="true">
+        <!-- 溫暖陽光與微光 -->
+        <div class="sun-glow"></div>
+
+        <!-- 飄動的雲朵 -->
+        <svg class="cloud cloud-1" viewBox="0 0 180 70">
+          <path d="M35 60h110a22 22 0 0 0 4-43.6A30 30 0 0 0 92 14a26 26 0 0 0-48 11A20 20 0 0 0 35 60z" fill="#FFFFFF" opacity="0.88"/>
+        </svg>
+        <svg class="cloud cloud-2" viewBox="0 0 150 60">
+          <path d="M28 52h94a18 18 0 0 0 3-35.8A25 25 0 0 0 77 12a21 21 0 0 0-39 9A17 17 0 0 0 28 52z" fill="#FFFFFF" opacity="0.78"/>
+        </svg>
+        <svg class="cloud cloud-3" viewBox="0 0 130 54">
+          <path d="M24 46h82a16 16 0 0 0 3-31.6A22 22 0 0 0 67 10a18 18 0 0 0-34 8A15 15 0 0 0 24 46z" fill="#FFFFFF" opacity="0.72"/>
+        </svg>
+
+        <!-- 背景閃爍小星點 -->
+        <div class="bg-sparkle s1">✦</div>
+        <div class="bg-sparkle s2">✦</div>
+        <div class="bg-sparkle s3">★</div>
+        <div class="bg-sparkle s4">✦</div>
+        <div class="bg-sparkle s5">★</div>
+
+        <!-- 遠近層次森林山丘與樹木 -->
+        <svg class="scenery-svg" viewBox="0 0 1280 720" preserveAspectRatio="none">
+          <!-- 遠山 -->
+          <path d="M0 540 Q220 440 480 510 T980 495 T1280 520 L1280 720 L0 720 Z" fill="#C6EBC5" />
+          <!-- 中層草坡 -->
+          <path d="M0 575 Q320 495 660 560 T1280 545 L1280 720 L0 720 Z" fill="#9BD88B" />
+          <!-- 前景草地 -->
+          <path d="M0 620 Q360 575 720 618 T1280 600 L1280 720 L0 720 Z" fill="#7AC76B" />
+
+          <!-- 左側森林樹群 -->
+          <g class="tree-left">
+            <rect x="46" y="455" width="24" height="120" rx="10" fill="#A67449" />
+            <circle cx="58" cy="420" r="66" fill="#5CB15D" />
+            <circle cx="24" cy="452" r="46" fill="#4E9F51" />
+            <circle cx="94" cy="458" r="44" fill="#6BC16A" />
+
+            <rect x="135" y="500" width="16" height="82" rx="8" fill="#9B6B43" />
+            <circle cx="143" cy="476" r="46" fill="#70C36B" />
+            <circle cx="122" cy="495" r="30" fill="#5DB25C" />
+          </g>
+
+          <!-- 右側森林樹群 -->
+          <g class="tree-right">
+            <rect x="1204" y="448" width="26" height="128" rx="10" fill="#A67449" />
+            <circle cx="1217" cy="410" r="68" fill="#5CB15D" />
+            <circle cx="1178" cy="450" r="46" fill="#6BC16A" />
+            <circle cx="1254" cy="450" r="48" fill="#4E9F51" />
+
+            <rect x="1128" y="498" width="16" height="80" rx="8" fill="#9B6B43" />
+            <circle cx="1136" cy="474" r="44" fill="#70C36B" />
+            <circle cx="1156" cy="492" r="30" fill="#5DB25C" />
+          </g>
+
+          <!-- 草地小花點綴 -->
+          <g class="meadow-flowers">
+            <circle cx="195" cy="656" r="6" fill="#FFF7A8"/>
+            <circle cx="195" cy="656" r="2.5" fill="#F6A623"/>
+            <circle cx="255" cy="676" r="5" fill="#FFD1DC"/>
+            <circle cx="255" cy="676" r="2" fill="#F6A623"/>
+            <circle cx="1015" cy="664" r="6" fill="#FFF7A8"/>
+            <circle cx="1015" cy="664" r="2.5" fill="#F6A623"/>
+            <circle cx="1078" cy="648" r="5" fill="#FFFFFF"/>
+            <circle cx="1078" cy="648" r="2" fill="#F6A623"/>
+            <circle cx="640" cy="686" r="5" fill="#FFF7A8"/>
+            <circle cx="640" cy="686" r="2" fill="#F6A623"/>
+          </g>
+        </svg>
+      </div>
+
+      <!-- 彩帶煙火 Canvas（過關時使用） -->
+      <canvas id="confetti-canvas" class="confetti-canvas" width="1280" height="720"></canvas>
+
+      <!-- 飛星動畫層 -->
+      <div id="fx-layer" class="fx-layer" aria-hidden="true"></div>
+
+      <!-- ==================== 畫面一：首頁（設定與開始） ==================== -->
+      <section id="screen-home" class="screen screen-home active" aria-label="首頁設定">
+        <!-- 右上工具列 -->
+        <div class="top-utility-bar home-utility">
+          <button id="btn-font-home" class="util-btn" type="button" title="切換注音字體（黑體 / 標楷體）">
+            <span class="util-icon">字</span>
+            <span class="util-label font-toggle-label">黑體</span>
+          </button>
+          <button id="btn-sound-home" class="util-btn sound-toggle-btn" type="button" title="開啟或關閉音效">
+            <span class="util-icon sound-icon">🔊</span>
+            <span class="util-label sound-label">音效開</span>
+          </button>
+          <button id="btn-fullscreen-home" class="util-btn fullscreen-btn" type="button" title="切換全螢幕">
+            <span class="util-icon">⛶</span>
+            <span class="util-label">全螢幕</span>
+          </button>
+        </div>
+
+        <!-- 標題與迎賓小動物 -->
+        <header class="home-header">
+          <div class="home-badge">✨ 注音符號 挑戰 ✨</div>
+          <h1 class="home-title">
+            <span class="title-star">⭐</span>
+            森林小動物集星星
+            <span class="title-star">⭐</span>
+          </h1>
+          <p class="home-subtitle">大聲唸出注音符號，一起幫森林小動物收集閃亮星星吧！</p>
+        </header>
+
+        <!-- 主設定卡片 -->
+        <main class="home-panel">
+          <!-- 第一區：選擇注音範圍 -->
+          <div class="setting-block">
+            <div class="setting-heading">1. 選擇練習範圍</div>
+            <div class="scope-grid" role="radiogroup" aria-label="練習範圍">
+              <button class="scope-card selected" data-scope="upper" type="button" role="radio" aria-checked="true">
+                <div class="scope-tag">中上</div>
+                <div class="scope-range">ㄅ ～ ㄖ</div>
+                <div class="scope-count">共 18 個注音</div>
+              </button>
+              <button class="scope-card" data-scope="lower" type="button" role="radio" aria-checked="false">
+                <div class="scope-tag">中下</div>
+                <div class="scope-range">ㄗ ～ ㄦ</div>
+                <div class="scope-count">共 19 個注音</div>
+              </button>
+              <button class="scope-card" data-scope="all" type="button" role="radio" aria-checked="false">
+                <div class="scope-tag">全部注音</div>
+                <div class="scope-range">ㄅ ～ ㄦ</div>
+                <div class="scope-count">全部 37 個注音</div>
+              </button>
+            </div>
+          </div>
+
+          <!-- 第二區：題數與順序 -->
+          <div class="setting-row">
+            <div class="setting-block compact">
+              <div class="setting-heading">2. 選擇題數</div>
+              <div class="pill-group" id="count-options" role="radiogroup" aria-label="題數選擇">
+                <button class="pill-btn selected" data-count="5" type="button" role="radio" aria-checked="true">⭐ 5 題（預設）</button>
+                <button class="pill-btn" data-count="10" type="button" role="radio" aria-checked="false">10 題</button>
+                <button class="pill-btn" data-count="all" type="button" role="radio" aria-checked="false" id="btn-count-all">全部（18 題）</button>
+              </div>
+            </div>
+
+            <div class="setting-block compact">
+              <div class="setting-heading">3. 出題順序</div>
+              <div class="pill-group" id="order-options" role="radiogroup" aria-label="出題順序">
+                <button class="pill-btn selected" data-order="random" type="button" role="radio" aria-checked="true">🎲 隨機出題</button>
+                <button class="pill-btn" data-order="sequential" type="button" role="radio" aria-checked="false">📋 照順序</button>
+              </div>
+            </div>
+          </div>
+        </main>
+
+        <!-- 開始按鈕與迎賓動物 -->
+        <footer class="home-footer">
+          <div class="home-animal home-animal-left" aria-hidden="true">
+            <!-- 小熊 SVG -->
+            <svg class="animal-svg" viewBox="0 0 180 190">
+              <g class="animal-body-group">
+                <!-- 耳朵 -->
+                <circle cx="48" cy="48" r="22" fill="#B57B4C"/>
+                <circle cx="48" cy="48" r="12" fill="#E8B892"/>
+                <circle cx="132" cy="48" r="22" fill="#B57B4C"/>
+                <circle cx="132" cy="48" r="12" fill="#E8B892"/>
+                <!-- 身體 -->
+                <ellipse cx="90" cy="148" rx="46" ry="38" fill="#B57B4C"/>
+                <ellipse cx="90" cy="152" rx="28" ry="24" fill="#F2D2B6"/>
+                <!-- 手臂 -->
+                <ellipse cx="42" cy="136" rx="15" ry="22" transform="rotate(28 42 136)" fill="#B57B4C"/>
+                <ellipse cx="138" cy="136" rx="15" ry="22" transform="rotate(-28 138 136)" fill="#B57B4C"/>
+                <!-- 頭部 -->
+                <ellipse cx="90" cy="86" rx="54" ry="48" fill="#C68958"/>
+                <!-- 嘴巴周圍 -->
+                <ellipse cx="90" cy="100" rx="24" ry="18" fill="#F8E1CB"/>
+                <!-- 鼻子與微笑 -->
+                <ellipse cx="90" cy="92" rx="8" ry="6" fill="#4A2E1B"/>
+                <path d="M82 103 Q90 111 98 103" fill="none" stroke="#4A2E1B" stroke-width="3.5" stroke-linecap="round"/>
+                <!-- 眼睛 -->
+                <circle class="eye" cx="68" cy="78" r="6" fill="#3B2415"/>
+                <circle cx="70" cy="76" r="2" fill="#FFFFFF"/>
+                <circle class="eye" cx="112" cy="78" r="6" fill="#3B2415"/>
+                <circle cx="114" cy="76" r="2" fill="#FFFFFF"/>
+                <!-- 腮紅 -->
+                <ellipse cx="54" cy="92" rx="9" ry="5.5" fill="#FF9E9E" opacity="0.65"/>
+                <ellipse cx="126" cy="92" rx="9" ry="5.5" fill="#FF9E9E" opacity="0.65"/>
+                <!-- 小星星胸章 -->
+                <polygon points="90,136 93,144 102,144 95,149 97,157 90,152 83,157 85,149 78,144 87,144" fill="#FFD447" stroke="#E59A1A" stroke-width="1.5"/>
+              </g>
+            </svg>
+          </div>
+
+          <button id="btn-start" class="btn-start" type="button">
+            <span class="btn-start-star">⭐</span>
+            <span>開始集星星</span>
+            <span class="btn-start-arrow">▶</span>
+          </button>
+
+          <div class="home-animal home-animal-right" aria-hidden="true">
+            <!-- 小兔 SVG -->
+            <svg class="animal-svg" viewBox="0 0 180 205">
+              <g class="animal-body-group">
+                <!-- 長耳朵 -->
+                <ellipse cx="64" cy="48" rx="15" ry="42" transform="rotate(-10 64 48)" fill="#FFF8F0" stroke="#E5D5C5" stroke-width="3"/>
+                <ellipse cx="64" cy="50" rx="8" ry="28" transform="rotate(-10 64 50)" fill="#FFB8C6"/>
+                <ellipse cx="116" cy="48" rx="15" ry="42" transform="rotate(10 116 48)" fill="#FFF8F0" stroke="#E5D5C5" stroke-width="3"/>
+                <ellipse cx="116" cy="50" rx="8" ry="28" transform="rotate(10 116 50)" fill="#FFB8C6"/>
+                <!-- 身體 -->
+                <ellipse cx="90" cy="162" rx="42" ry="35" fill="#FFF8F0" stroke="#E5D5C5" stroke-width="3"/>
+                <ellipse cx="90" cy="166" rx="25" ry="22" fill="#FFE6EC"/>
+                <!-- 小手 -->
+                <ellipse cx="46" cy="152" rx="13" ry="19" transform="rotate(30 46 152)" fill="#FFF8F0" stroke="#E5D5C5" stroke-width="2.5"/>
+                <ellipse cx="134" cy="152" rx="13" ry="19" transform="rotate(-30 134 152)" fill="#FFF8F0" stroke="#E5D5C5" stroke-width="2.5"/>
+                <!-- 頭部 -->
+                <ellipse cx="90" cy="105" rx="50" ry="44" fill="#FFF8F0" stroke="#E5D5C5" stroke-width="3"/>
+                <!-- 鼻子與嘴巴 -->
+                <polygon points="85,107 95,107 90,113" fill="#FF8DA1"/>
+                <path d="M82 118 Q90 124 98 118" fill="none" stroke="#5C4438" stroke-width="3" stroke-linecap="round"/>
+                <!-- 眼睛 -->
+                <circle class="eye" cx="70" cy="96" r="5.8" fill="#4A3528"/>
+                <circle cx="72" cy="94" r="2" fill="#FFFFFF"/>
+                <circle class="eye" cx="110" cy="96" r="5.8" fill="#4A3528"/>
+                <circle cx="112" cy="94" r="2" fill="#FFFFFF"/>
+                <!-- 腮紅 -->
+                <ellipse cx="55" cy="108" rx="9" ry="5.5" fill="#FF9EB5" opacity="0.65"/>
+                <ellipse cx="125" cy="108" rx="9" ry="5.5" fill="#FF9EB5" opacity="0.65"/>
+              </g>
+            </svg>
+          </div>
+        </footer>
+      </section>
+
+      <!-- ==================== 畫面二：遊戲主畫面 ==================== -->
+      <section id="screen-game" class="screen screen-game" aria-label="注音挑戰畫面">
+        <!-- 頂部狀態列 -->
+        <header class="game-topbar">
+          <div class="topbar-left">
+            <button id="btn-back-home" class="home-nav-btn" type="button" title="回到首頁">
+              <span>🏠</span>
+              <span>首頁</span>
+            </button>
+            <div id="game-scope-badge" class="mode-badge">中上 ㄅ～ㄖ</div>
+          </div>
+
+          <!-- 中央星星進度槽 -->
+          <div id="star-progress-wrap" class="star-progress-wrap" aria-live="polite">
+            <!-- 由 JS 動態填入星星槽或星星進度條 -->
+          </div>
+
+          <!-- 右上工具與題數 -->
+          <div class="topbar-right">
+            <div id="progress-pill" class="progress-pill">0 / 5 顆星</div>
+            <button id="btn-font-game" class="util-btn icon-only" type="button" title="切換注音字體">
+              <span class="util-icon font-toggle-short">黑</span>
+            </button>
+            <button id="btn-sound-game" class="util-btn icon-only sound-toggle-btn" type="button" title="開啟或關閉音效">
+              <span class="util-icon sound-icon">🔊</span>
+            </button>
+            <button id="btn-fullscreen-game" class="util-btn icon-only fullscreen-btn" type="button" title="切換全螢幕">
+              <span class="util-icon">⛶</span>
+            </button>
+          </div>
+        </header>
+
+        <!-- 中央主視覺：左右小動物 + 超大純注音卡 -->
+        <main class="game-arena">
+          <!-- 左側應援小動物 -->
+          <div id="animal-left" class="stage-animal stage-animal-left">
+            <div class="animal-bubble" id="bubble-left">好棒喔！⭐</div>
+            <div class="animal-slot" id="animal-left-svg"></div>
+          </div>
+
+          <!-- 中央純注音木框大卡片 -->
+          <div class="zhuyin-card-wrap">
+            <div id="zhuyin-card" class="zhuyin-card">
+              <div class="card-corner-star tl">✦</div>
+              <div class="card-corner-star tr">✦</div>
+              <div class="card-corner-star bl">✦</div>
+              <div class="card-corner-star br">✦</div>
+              <div id="zhuyin-symbol" class="zhuyin-symbol" aria-live="assertive">ㄅ</div>
+            </div>
+            <div id="card-hint-toast" class="card-hint-toast" aria-live="polite"></div>
+          </div>
+
+          <!-- 右側應援小動物 -->
+          <div id="animal-right" class="stage-animal stage-animal-right">
+            <div class="animal-bubble" id="bubble-right">太厲害了！✨</div>
+            <div class="animal-slot" id="animal-right-svg"></div>
+          </div>
+        </main>
+
+        <!-- 下方老師判定控制區（大觸控按鈕） -->
+        <footer class="game-controls">
+          <button id="btn-retry" class="control-btn btn-retry" type="button">
+            <span class="ctrl-icon">🔄</span>
+            <span class="ctrl-text">
+              <span class="ctrl-main">換一題再挑戰</span>
+              <span class="ctrl-sub">不扣星，換別的注音挑戰</span>
+            </span>
+          </button>
+
+          <button id="btn-correct" class="control-btn btn-correct" type="button">
+            <span class="ctrl-icon">⭐</span>
+            <span class="ctrl-text">
+              <span class="ctrl-main">唸對了！得星星</span>
+              <span class="ctrl-sub">送出一顆閃亮星星</span>
+            </span>
+          </button>
+        </footer>
+      </section>
+
+      <!-- ==================== 畫面三：過關頒獎畫面 ==================== -->
+      <section id="screen-victory" class="screen screen-victory" aria-label="過關慶祝畫面">
+        <div class="victory-content">
+          <div class="victory-star-crown" aria-hidden="true">
+            <span class="crown-star s-left">⭐</span>
+            <span class="crown-star s-center">🌟</span>
+            <span class="crown-star s-right">⭐</span>
+          </div>
+
+          <h2 id="victory-title" class="victory-title">太棒了！集滿 5 顆星星！</h2>
+          <p id="victory-subtitle" class="victory-subtitle">森林小動物都為你拍拍手！</p>
+
+          <!-- 四隻森林小動物大集合慶祝 -->
+          <div id="victory-animals" class="victory-animals" aria-hidden="true"></div>
+
+          <!-- 本回合複習注音總覽 -->
+          <div class="review-box">
+            <div class="review-label">✨ 這一輪一起唸過的注音 ✨</div>
+            <div id="review-chips" class="review-chips"></div>
+          </div>
+
+          <!-- 底部大按鈕 -->
+          <div class="victory-actions">
+            <button id="btn-play-again" class="victory-btn btn-again" type="button">
+              <span>🔄</span>
+              <span>再玩一次</span>
+            </button>
+            <button id="btn-victory-home" class="victory-btn btn-home" type="button">
+              <span>🏠</span>
+              <span>回首頁換範圍</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== 返回首頁防誤觸確認視窗 ==================== -->
+      <div id="modal-confirm" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title" hidden>
+        <div class="modal-card">
+          <div class="modal-icon">🏠</div>
+          <h3 id="modal-title" class="modal-title">要回到首頁嗎？</h3>
+          <p class="modal-desc">目前的星星進度會重新計算喔！</p>
+          <div class="modal-actions">
+            <button id="btn-modal-cancel" class="modal-btn btn-cancel" type="button">繼續集星星</button>
+            <button id="btn-modal-ok" class="modal-btn btn-ok" type="button">回首頁</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 底部版權宣告 -->
+      <div class="site-copyright">© 傑尼爾教育文化事業集團 版權所有</div>
+
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
