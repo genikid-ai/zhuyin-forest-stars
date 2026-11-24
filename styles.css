@@ -37,7 +37,7 @@ body {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background: radial-gradient(circle at center, #3A6B4C 0%, #244732 100%);
+  background: radial-gradient(circle at center, #6A8261 0%, #445940 100%);
   font-family: var(--font-ui);
   color: var(--ink-dark);
   touch-action: manipulation;
@@ -60,9 +60,9 @@ body {
   height: 720px;
   position: relative;
   overflow: hidden;
-  border-radius: 14px;
-  background: linear-gradient(180deg, #D9F2FF 0%, #EFFBFF 42%, #FFF9E6 76%, #E5F5D5 100%);
-  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.42);
+  border-radius: 16px;
+  background: #FFF9EA;
+  box-shadow: 0 24px 70px rgba(42, 31, 18, 0.38);
   transform-origin: center center;
   flex-shrink: 0;
 }
@@ -73,7 +73,7 @@ body {
   box-shadow: none;
 }
 
-/* ==================== 森林共用背景 ==================== */
+/* ==================== 溫暖繪本風森林背景 ==================== */
 .forest-bg {
   position: absolute;
   inset: 0;
@@ -82,53 +82,31 @@ body {
   overflow: hidden;
 }
 
+.forest-bg-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+}
+
 .sun-glow {
   position: absolute;
-  top: -110px;
+  top: -90px;
   left: 50%;
   transform: translateX(-50%);
-  width: 760px;
+  width: 820px;
   height: 360px;
-  background: radial-gradient(ellipse at center, rgba(255, 241, 179, 0.72) 0%, rgba(255, 241, 179, 0) 70%);
-}
-
-.cloud {
-  position: absolute;
-  will-change: transform;
-}
-
-.cloud-1 {
-  top: 46px;
-  left: 80px;
-  width: 185px;
-  animation: driftCloud 28s ease-in-out infinite alternate;
-}
-
-.cloud-2 {
-  top: 96px;
-  right: 115px;
-  width: 155px;
-  animation: driftCloud 34s ease-in-out infinite alternate-reverse;
-}
-
-.cloud-3 {
-  top: 165px;
-  left: 255px;
-  width: 115px;
-  animation: driftCloud 24s ease-in-out infinite alternate;
-}
-
-@keyframes driftCloud {
-  0% { transform: translateX(-18px); }
-  100% { transform: translateX(30px); }
+  background: radial-gradient(ellipse at center, rgba(255, 246, 206, 0.42) 0%, rgba(255, 246, 206, 0) 70%);
 }
 
 .bg-sparkle {
   position: absolute;
-  color: #F7C948;
+  color: #E8B84B;
   font-size: 20px;
   opacity: 0.45;
-  animation: twinkle 3.6s ease-in-out infinite;
+  animation: twinkle 3.8s ease-in-out infinite;
 }
 
 .bg-sparkle.s1 { top: 82px; left: 320px; animation-delay: 0s; font-size: 18px; }
@@ -138,15 +116,8 @@ body {
 .bg-sparkle.s5 { top: 132px; left: 610px; animation-delay: 2.7s; font-size: 14px; }
 
 @keyframes twinkle {
-  0%, 100% { opacity: 0.25; transform: scale(0.85); }
-  50% { opacity: 0.85; transform: scale(1.2); }
-}
-
-.scenery-svg {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
+  0%, 100% { opacity: 0.22; transform: scale(0.85); }
+  50% { opacity: 0.78; transform: scale(1.18); }
 }
 
 .confetti-canvas {
@@ -298,14 +269,15 @@ body {
   color: #5C4634;
 }
 
-/* 設定卡片主面板 */
+/* 設定卡片主面板（溫暖水彩紙質感） */
 .home-panel {
   width: 960px;
-  background: rgba(255, 253, 247, 0.94);
-  border: 4px solid #E5B26B;
+  background: rgba(255, 252, 245, 0.91);
+  backdrop-filter: blur(4px);
+  border: 4px solid #D3A067;
   border-radius: 30px;
   padding: 22px 30px 24px;
-  box-shadow: 0 12px 0 rgba(186, 130, 58, 0.28), 0 18px 34px rgba(59, 40, 27, 0.12);
+  box-shadow: 0 11px 0 rgba(168, 118, 62, 0.26), 0 18px 34px rgba(74, 52, 33, 0.13);
   display: flex;
   flex-direction: column;
   gap: 18px;
@@ -498,17 +470,21 @@ body.font-kai .mode-badge {
 
 .home-animal {
   position: absolute;
-  bottom: -8px;
-  width: 162px;
+  bottom: -4px;
+  width: 184px;
+  height: 184px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
   pointer-events: none;
 }
 
 .home-animal-left {
-  left: 92px;
+  left: 88px;
 }
 
 .home-animal-right {
-  right: 92px;
+  right: 88px;
 }
 
 /* ==================== 畫面二：遊戲主畫面 ==================== */
@@ -715,13 +691,13 @@ body.font-kai .mode-badge {
 .zhuyin-card {
   width: 450px;
   height: 400px;
-  border-radius: 46px;
-  background: linear-gradient(180deg, #FFFFFF 0%, #FFFBF0 100%);
-  border: 10px solid var(--wood-border);
+  border-radius: 44px;
+  background: linear-gradient(180deg, #FFFDF8 0%, #FDF5E4 100%);
+  border: 10px solid #CE955A;
   box-shadow:
-    inset 0 0 0 5px #FFF2D6,
-    0 16px 0 var(--wood-shadow),
-    0 24px 44px rgba(64, 41, 18, 0.22);
+    inset 0 0 0 5px #F6E6C9,
+    0 15px 0 #A8713C,
+    0 24px 44px rgba(74, 52, 33, 0.22);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -731,7 +707,7 @@ body.font-kai .mode-badge {
 
 .card-corner-star {
   position: absolute;
-  color: #F4C869;
+  color: #E6B555;
   font-size: 24px;
   opacity: 0.85;
 }
@@ -747,8 +723,8 @@ body.font-kai .mode-badge {
   font-size: 258px;
   font-weight: 900;
   line-height: 1;
-  color: #2B1D14;
-  text-shadow: 0 4px 0 rgba(217, 155, 82, 0.22);
+  color: #3A2516;
+  text-shadow: 0 4px 0 rgba(206, 149, 90, 0.22);
   transform: translateY(-4px);
 }
 
@@ -816,10 +792,10 @@ body.font-kai .review-chip {
   transform: translateY(0);
 }
 
-/* 左右應援小動物 */
+/* 左右應援繪本小動物 */
 .stage-animal {
-  width: 245px;
-  height: 290px;
+  width: 265px;
+  height: 310px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -828,36 +804,35 @@ body.font-kai .review-chip {
 }
 
 .animal-slot {
-  width: 225px;
-  height: 235px;
+  width: 255px;
+  height: 255px;
   display: flex;
   align-items: flex-end;
   justify-content: center;
 }
 
-.animal-svg {
+.animal-img {
   width: 100%;
   height: 100%;
-  overflow: visible;
-  filter: drop-shadow(0 10px 10px rgba(48, 76, 40, 0.18));
-}
-
-.animal-body-group {
-  transform-origin: 90px 175px;
+  object-fit: contain;
+  object-position: bottom center;
+  filter: drop-shadow(0 10px 12px rgba(74, 52, 33, 0.22));
+  transform-origin: center bottom;
   animation: animalIdle 3.2s ease-in-out infinite;
+  pointer-events: none;
 }
 
-.stage-animal-right .animal-body-group,
-.home-animal-right .animal-body-group {
+.stage-animal-right .animal-img,
+.home-animal-right .animal-img {
   animation-delay: 1.1s;
 }
 
 @keyframes animalIdle {
   0%, 100% { transform: translateY(0) scaleY(1); }
-  50% { transform: translateY(-6px) scaleY(1.015); }
+  50% { transform: translateY(-6px) scaleY(1.018); }
 }
 
-.stage-animal.cheering .animal-body-group {
+.stage-animal.cheering .animal-img {
   animation: animalCheerJump 0.68s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
@@ -869,7 +844,7 @@ body.font-kai .review-chip {
   100% { transform: translateY(0) scale(1); }
 }
 
-.stage-animal.encouraging .animal-body-group {
+.stage-animal.encouraging .animal-img {
   animation: animalEncourage 0.55s ease-in-out;
 }
 
@@ -1103,9 +1078,16 @@ body.font-kai .review-chip {
 }
 
 .victory-animal-item {
-  width: 152px;
-  height: 158px;
+  width: 162px;
+  height: 164px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
   animation: victoryJump 1.15s ease-in-out infinite;
+}
+
+.victory-animal-item .animal-img {
+  animation: none;
 }
 
 .victory-animal-item:nth-child(2) { animation-delay: 0.18s; }
@@ -1324,8 +1306,8 @@ body.font-kai .review-chip {
   pointer-events: none;
   font-size: 14px;
   font-weight: 700;
-  color: rgba(31, 66, 30, 0.85);
+  color: rgba(74, 52, 33, 0.85);
   letter-spacing: 1.2px;
   white-space: nowrap;
-  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.65);
+  text-shadow: 0 1px 3px rgba(255, 253, 245, 0.92);
 }
