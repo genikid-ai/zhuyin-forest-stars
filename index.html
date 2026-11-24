@@ -11,76 +11,17 @@
   <div id="viewport" class="viewport">
     <div id="stage" class="stage" role="application" aria-label="森林小動物集星星注音小遊戲">
 
-      <!-- ==================== 共用森林故事背景 ==================== -->
+      <!-- ==================== 共用溫暖繪本風森林背景 ==================== -->
       <div class="forest-bg" aria-hidden="true">
-        <!-- 溫暖陽光與微光 -->
+        <img class="forest-bg-img" src="assets/bg-forest.jpg" alt="" draggable="false" />
         <div class="sun-glow"></div>
 
-        <!-- 飄動的雲朵 -->
-        <svg class="cloud cloud-1" viewBox="0 0 180 70">
-          <path d="M35 60h110a22 22 0 0 0 4-43.6A30 30 0 0 0 92 14a26 26 0 0 0-48 11A20 20 0 0 0 35 60z" fill="#FFFFFF" opacity="0.88"/>
-        </svg>
-        <svg class="cloud cloud-2" viewBox="0 0 150 60">
-          <path d="M28 52h94a18 18 0 0 0 3-35.8A25 25 0 0 0 77 12a21 21 0 0 0-39 9A17 17 0 0 0 28 52z" fill="#FFFFFF" opacity="0.78"/>
-        </svg>
-        <svg class="cloud cloud-3" viewBox="0 0 130 54">
-          <path d="M24 46h82a16 16 0 0 0 3-31.6A22 22 0 0 0 67 10a18 18 0 0 0-34 8A15 15 0 0 0 24 46z" fill="#FFFFFF" opacity="0.72"/>
-        </svg>
-
-        <!-- 背景閃爍小星點 -->
+        <!-- 輕柔閃爍星點 -->
         <div class="bg-sparkle s1">✦</div>
         <div class="bg-sparkle s2">✦</div>
         <div class="bg-sparkle s3">★</div>
         <div class="bg-sparkle s4">✦</div>
         <div class="bg-sparkle s5">★</div>
-
-        <!-- 遠近層次森林山丘與樹木 -->
-        <svg class="scenery-svg" viewBox="0 0 1280 720" preserveAspectRatio="none">
-          <!-- 遠山 -->
-          <path d="M0 540 Q220 440 480 510 T980 495 T1280 520 L1280 720 L0 720 Z" fill="#C6EBC5" />
-          <!-- 中層草坡 -->
-          <path d="M0 575 Q320 495 660 560 T1280 545 L1280 720 L0 720 Z" fill="#9BD88B" />
-          <!-- 前景草地 -->
-          <path d="M0 620 Q360 575 720 618 T1280 600 L1280 720 L0 720 Z" fill="#7AC76B" />
-
-          <!-- 左側森林樹群 -->
-          <g class="tree-left">
-            <rect x="46" y="455" width="24" height="120" rx="10" fill="#A67449" />
-            <circle cx="58" cy="420" r="66" fill="#5CB15D" />
-            <circle cx="24" cy="452" r="46" fill="#4E9F51" />
-            <circle cx="94" cy="458" r="44" fill="#6BC16A" />
-
-            <rect x="135" y="500" width="16" height="82" rx="8" fill="#9B6B43" />
-            <circle cx="143" cy="476" r="46" fill="#70C36B" />
-            <circle cx="122" cy="495" r="30" fill="#5DB25C" />
-          </g>
-
-          <!-- 右側森林樹群 -->
-          <g class="tree-right">
-            <rect x="1204" y="448" width="26" height="128" rx="10" fill="#A67449" />
-            <circle cx="1217" cy="410" r="68" fill="#5CB15D" />
-            <circle cx="1178" cy="450" r="46" fill="#6BC16A" />
-            <circle cx="1254" cy="450" r="48" fill="#4E9F51" />
-
-            <rect x="1128" y="498" width="16" height="80" rx="8" fill="#9B6B43" />
-            <circle cx="1136" cy="474" r="44" fill="#70C36B" />
-            <circle cx="1156" cy="492" r="30" fill="#5DB25C" />
-          </g>
-
-          <!-- 草地小花點綴 -->
-          <g class="meadow-flowers">
-            <circle cx="195" cy="656" r="6" fill="#FFF7A8"/>
-            <circle cx="195" cy="656" r="2.5" fill="#F6A623"/>
-            <circle cx="255" cy="676" r="5" fill="#FFD1DC"/>
-            <circle cx="255" cy="676" r="2" fill="#F6A623"/>
-            <circle cx="1015" cy="664" r="6" fill="#FFF7A8"/>
-            <circle cx="1015" cy="664" r="2.5" fill="#F6A623"/>
-            <circle cx="1078" cy="648" r="5" fill="#FFFFFF"/>
-            <circle cx="1078" cy="648" r="2" fill="#F6A623"/>
-            <circle cx="640" cy="686" r="5" fill="#FFF7A8"/>
-            <circle cx="640" cy="686" r="2" fill="#F6A623"/>
-          </g>
-        </svg>
       </div>
 
       <!-- 彩帶煙火 Canvas（過關時使用） -->
@@ -166,39 +107,7 @@
         <!-- 開始按鈕與迎賓動物 -->
         <footer class="home-footer">
           <div class="home-animal home-animal-left" aria-hidden="true">
-            <!-- 小熊 SVG -->
-            <svg class="animal-svg" viewBox="0 0 180 190">
-              <g class="animal-body-group">
-                <!-- 耳朵 -->
-                <circle cx="48" cy="48" r="22" fill="#B57B4C"/>
-                <circle cx="48" cy="48" r="12" fill="#E8B892"/>
-                <circle cx="132" cy="48" r="22" fill="#B57B4C"/>
-                <circle cx="132" cy="48" r="12" fill="#E8B892"/>
-                <!-- 身體 -->
-                <ellipse cx="90" cy="148" rx="46" ry="38" fill="#B57B4C"/>
-                <ellipse cx="90" cy="152" rx="28" ry="24" fill="#F2D2B6"/>
-                <!-- 手臂 -->
-                <ellipse cx="42" cy="136" rx="15" ry="22" transform="rotate(28 42 136)" fill="#B57B4C"/>
-                <ellipse cx="138" cy="136" rx="15" ry="22" transform="rotate(-28 138 136)" fill="#B57B4C"/>
-                <!-- 頭部 -->
-                <ellipse cx="90" cy="86" rx="54" ry="48" fill="#C68958"/>
-                <!-- 嘴巴周圍 -->
-                <ellipse cx="90" cy="100" rx="24" ry="18" fill="#F8E1CB"/>
-                <!-- 鼻子與微笑 -->
-                <ellipse cx="90" cy="92" rx="8" ry="6" fill="#4A2E1B"/>
-                <path d="M82 103 Q90 111 98 103" fill="none" stroke="#4A2E1B" stroke-width="3.5" stroke-linecap="round"/>
-                <!-- 眼睛 -->
-                <circle class="eye" cx="68" cy="78" r="6" fill="#3B2415"/>
-                <circle cx="70" cy="76" r="2" fill="#FFFFFF"/>
-                <circle class="eye" cx="112" cy="78" r="6" fill="#3B2415"/>
-                <circle cx="114" cy="76" r="2" fill="#FFFFFF"/>
-                <!-- 腮紅 -->
-                <ellipse cx="54" cy="92" rx="9" ry="5.5" fill="#FF9E9E" opacity="0.65"/>
-                <ellipse cx="126" cy="92" rx="9" ry="5.5" fill="#FF9E9E" opacity="0.65"/>
-                <!-- 小星星胸章 -->
-                <polygon points="90,136 93,144 102,144 95,149 97,157 90,152 83,157 85,149 78,144 87,144" fill="#FFD447" stroke="#E59A1A" stroke-width="1.5"/>
-              </g>
-            </svg>
+            <img class="animal-img" src="assets/animal-bear.png" alt="繪本小熊" draggable="false" />
           </div>
 
           <button id="btn-start" class="btn-start" type="button">
@@ -208,35 +117,7 @@
           </button>
 
           <div class="home-animal home-animal-right" aria-hidden="true">
-            <!-- 小兔 SVG -->
-            <svg class="animal-svg" viewBox="0 0 180 205">
-              <g class="animal-body-group">
-                <!-- 長耳朵 -->
-                <ellipse cx="64" cy="48" rx="15" ry="42" transform="rotate(-10 64 48)" fill="#FFF8F0" stroke="#E5D5C5" stroke-width="3"/>
-                <ellipse cx="64" cy="50" rx="8" ry="28" transform="rotate(-10 64 50)" fill="#FFB8C6"/>
-                <ellipse cx="116" cy="48" rx="15" ry="42" transform="rotate(10 116 48)" fill="#FFF8F0" stroke="#E5D5C5" stroke-width="3"/>
-                <ellipse cx="116" cy="50" rx="8" ry="28" transform="rotate(10 116 50)" fill="#FFB8C6"/>
-                <!-- 身體 -->
-                <ellipse cx="90" cy="162" rx="42" ry="35" fill="#FFF8F0" stroke="#E5D5C5" stroke-width="3"/>
-                <ellipse cx="90" cy="166" rx="25" ry="22" fill="#FFE6EC"/>
-                <!-- 小手 -->
-                <ellipse cx="46" cy="152" rx="13" ry="19" transform="rotate(30 46 152)" fill="#FFF8F0" stroke="#E5D5C5" stroke-width="2.5"/>
-                <ellipse cx="134" cy="152" rx="13" ry="19" transform="rotate(-30 134 152)" fill="#FFF8F0" stroke="#E5D5C5" stroke-width="2.5"/>
-                <!-- 頭部 -->
-                <ellipse cx="90" cy="105" rx="50" ry="44" fill="#FFF8F0" stroke="#E5D5C5" stroke-width="3"/>
-                <!-- 鼻子與嘴巴 -->
-                <polygon points="85,107 95,107 90,113" fill="#FF8DA1"/>
-                <path d="M82 118 Q90 124 98 118" fill="none" stroke="#5C4438" stroke-width="3" stroke-linecap="round"/>
-                <!-- 眼睛 -->
-                <circle class="eye" cx="70" cy="96" r="5.8" fill="#4A3528"/>
-                <circle cx="72" cy="94" r="2" fill="#FFFFFF"/>
-                <circle class="eye" cx="110" cy="96" r="5.8" fill="#4A3528"/>
-                <circle cx="112" cy="94" r="2" fill="#FFFFFF"/>
-                <!-- 腮紅 -->
-                <ellipse cx="55" cy="108" rx="9" ry="5.5" fill="#FF9EB5" opacity="0.65"/>
-                <ellipse cx="125" cy="108" rx="9" ry="5.5" fill="#FF9EB5" opacity="0.65"/>
-              </g>
-            </svg>
+            <img class="animal-img" src="assets/animal-bunny.png" alt="繪本小兔" draggable="false" />
           </div>
         </footer>
       </section>
