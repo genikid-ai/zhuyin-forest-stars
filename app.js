@@ -30,123 +30,24 @@
   const CHEER_PHRASES_RIGHT = ["耶！答對了！🎉", "超級棒！⭐", "拍拍手！👏", "森林之星！🌟"];
   const ENCOURAGE_PHRASES = ["換一題挑戰！💛", "試試看這個！✨", "沒關係，加油！🌿"];
 
-  /* ==================== 2. 原創森林小動物 SVG ==================== */
-  const ANIMAL_SVGS = {
-    bear: `
-      <svg class="animal-svg" viewBox="0 0 180 195">
-        <g class="animal-body-group">
-          <circle cx="48" cy="50" r="22" fill="#B57B4C"/>
-          <circle cx="48" cy="50" r="12" fill="#E8B892"/>
-          <circle cx="132" cy="50" r="22" fill="#B57B4C"/>
-          <circle cx="132" cy="50" r="12" fill="#E8B892"/>
-          <ellipse cx="90" cy="152" rx="46" ry="38" fill="#B57B4C"/>
-          <ellipse cx="90" cy="156" rx="28" ry="24" fill="#F2D2B6"/>
-          <ellipse cx="42" cy="140" rx="15" ry="22" transform="rotate(28 42 140)" fill="#B57B4C"/>
-          <ellipse cx="138" cy="140" rx="15" ry="22" transform="rotate(-28 138 140)" fill="#B57B4C"/>
-          <ellipse cx="90" cy="90" rx="54" ry="48" fill="#C68958"/>
-          <ellipse cx="90" cy="104" rx="24" ry="18" fill="#F8E1CB"/>
-          <ellipse cx="90" cy="96" rx="8" ry="6" fill="#4A2E1B"/>
-          <path d="M82 107 Q90 115 98 107" fill="none" stroke="#4A2E1B" stroke-width="3.5" stroke-linecap="round"/>
-          <circle cx="68" cy="82" r="6" fill="#3B2415"/>
-          <circle cx="70" cy="80" r="2" fill="#FFFFFF"/>
-          <circle cx="112" cy="82" r="6" fill="#3B2415"/>
-          <circle cx="114" cy="80" r="2" fill="#FFFFFF"/>
-          <ellipse cx="54" cy="96" rx="9" ry="5.5" fill="#FF9E9E" opacity="0.65"/>
-          <ellipse cx="126" cy="96" rx="9" ry="5.5" fill="#FF9E9E" opacity="0.65"/>
-          <polygon points="90,140 93,148 102,148 95,153 97,161 90,156 83,161 85,153 78,148 87,148" fill="#FFD447" stroke="#E59A1A" stroke-width="1.5"/>
-        </g>
-      </svg>
-    `,
-    bunny: `
-      <svg class="animal-svg" viewBox="0 0 180 205">
-        <g class="animal-body-group">
-          <ellipse cx="64" cy="48" rx="15" ry="42" transform="rotate(-10 64 48)" fill="#FFF8F0" stroke="#E5D5C5" stroke-width="3"/>
-          <ellipse cx="64" cy="50" rx="8" ry="28" transform="rotate(-10 64 50)" fill="#FFB8C6"/>
-          <ellipse cx="116" cy="48" rx="15" ry="42" transform="rotate(10 116 48)" fill="#FFF8F0" stroke="#E5D5C5" stroke-width="3"/>
-          <ellipse cx="116" cy="50" rx="8" ry="28" transform="rotate(10 116 50)" fill="#FFB8C6"/>
-          <ellipse cx="90" cy="162" rx="42" ry="35" fill="#FFF8F0" stroke="#E5D5C5" stroke-width="3"/>
-          <ellipse cx="90" cy="166" rx="25" ry="22" fill="#FFE6EC"/>
-          <ellipse cx="46" cy="152" rx="13" ry="19" transform="rotate(30 46 152)" fill="#FFF8F0" stroke="#E5D5C5" stroke-width="2.5"/>
-          <ellipse cx="134" cy="152" rx="13" ry="19" transform="rotate(-30 134 152)" fill="#FFF8F0" stroke="#E5D5C5" stroke-width="2.5"/>
-          <ellipse cx="90" cy="105" rx="50" ry="44" fill="#FFF8F0" stroke="#E5D5C5" stroke-width="3"/>
-          <polygon points="85,107 95,107 90,113" fill="#FF8DA1"/>
-          <path d="M82 118 Q90 124 98 118" fill="none" stroke="#5C4438" stroke-width="3" stroke-linecap="round"/>
-          <circle cx="70" cy="96" r="5.8" fill="#4A3528"/>
-          <circle cx="72" cy="94" r="2" fill="#FFFFFF"/>
-          <circle cx="110" cy="96" r="5.8" fill="#4A3528"/>
-          <circle cx="112" cy="94" r="2" fill="#FFFFFF"/>
-          <ellipse cx="55" cy="108" rx="9" ry="5.5" fill="#FF9EB5" opacity="0.65"/>
-          <ellipse cx="125" cy="108" rx="9" ry="5.5" fill="#FF9EB5" opacity="0.65"/>
-        </g>
-      </svg>
-    `,
-    fox: `
-      <svg class="animal-svg" viewBox="0 0 185 195">
-        <g class="animal-body-group">
-          <!-- 蓬鬆尾巴 -->
-          <path d="M126 164 Q172 146 164 114 Q146 112 132 138 Z" fill="#F0833A"/>
-          <path d="M164 114 Q154 112 146 126 Q158 130 164 114 Z" fill="#FFF7EB"/>
-          <!-- 尖耳朵 -->
-          <polygon points="44,82 54,32 82,64" fill="#F0833A"/>
-          <polygon points="52,74 58,45 73,64" fill="#FFE0C2"/>
-          <polygon points="136,82 126,32 98,64" fill="#F0833A"/>
-          <polygon points="128,74 122,45 107,64" fill="#FFE0C2"/>
-          <!-- 身體 -->
-          <ellipse cx="90" cy="152" rx="42" ry="36" fill="#F0833A"/>
-          <ellipse cx="90" cy="156" rx="24" ry="24" fill="#FFF7EB"/>
-          <ellipse cx="46" cy="144" rx="13" ry="20" transform="rotate(25 46 144)" fill="#F0833A"/>
-          <ellipse cx="134" cy="144" rx="13" ry="20" transform="rotate(-25 134 144)" fill="#F0833A"/>
-          <!-- 頭部 -->
-          <ellipse cx="90" cy="96" rx="52" ry="44" fill="#F48D44"/>
-          <!-- 白色臉頰 -->
-          <path d="M40 98 Q62 128 90 128 Q118 128 140 98 Q126 138 90 140 Q54 138 40 98 Z" fill="#FFF7EB"/>
-          <!-- 鼻子與微笑 -->
-          <ellipse cx="90" cy="107" rx="7" ry="5" fill="#3B2415"/>
-          <path d="M83 116 Q90 123 97 116" fill="none" stroke="#3B2415" stroke-width="3" stroke-linecap="round"/>
-          <!-- 眼睛 -->
-          <circle cx="69" cy="90" r="5.8" fill="#3B2415"/>
-          <circle cx="71" cy="88" r="2" fill="#FFFFFF"/>
-          <circle cx="111" cy="90" r="5.8" fill="#3B2415"/>
-          <circle cx="113" cy="88" r="2" fill="#FFFFFF"/>
-          <!-- 腮紅 -->
-          <ellipse cx="55" cy="104" rx="8.5" ry="5" fill="#FF9E9E" opacity="0.6"/>
-          <ellipse cx="125" cy="104" rx="8.5" ry="5" fill="#FF9E9E" opacity="0.6"/>
-        </g>
-      </svg>
-    `,
-    owl: `
-      <svg class="animal-svg" viewBox="0 0 180 195">
-        <g class="animal-body-group">
-          <!-- 耳羽 -->
-          <polygon points="48,68 42,36 72,54" fill="#8D6E63"/>
-          <polygon points="132,68 138,36 108,54" fill="#8D6E63"/>
-          <!-- 圓圓身體 -->
-          <ellipse cx="90" cy="120" rx="58" ry="64" fill="#9E7B6B"/>
-          <!-- 翅膀 -->
-          <ellipse cx="36" cy="126" rx="16" ry="34" transform="rotate(16 36 126)" fill="#836456"/>
-          <ellipse cx="144" cy="126" rx="16" ry="34" transform="rotate(-16 144 126)" fill="#836456"/>
-          <!-- 淺色肚肚 -->
-          <ellipse cx="90" cy="142" rx="38" ry="36" fill="#F8EBD8"/>
-          <path d="M72 134 Q78 140 84 134 M96 134 Q102 140 108 134 M84 148 Q90 154 96 148" fill="none" stroke="#C8A98E" stroke-width="3" stroke-linecap="round"/>
-          <!-- 大眼眶 -->
-          <circle cx="68" cy="86" r="22" fill="#FFF9EF"/>
-          <circle cx="112" cy="86" r="22" fill="#FFF9EF"/>
-          <circle cx="69" cy="86" r="9" fill="#3B2415"/>
-          <circle cx="72" cy="83" r="3" fill="#FFFFFF"/>
-          <circle cx="111" cy="86" r="9" fill="#3B2415"/>
-          <circle cx="114" cy="83" r="3" fill="#FFFFFF"/>
-          <!-- 嘴巴 -->
-          <polygon points="84,96 96,96 90,108" fill="#F5A623"/>
-          <!-- 腮紅 -->
-          <ellipse cx="48" cy="102" rx="7" ry="4.5" fill="#FF9E9E" opacity="0.6"/>
-          <ellipse cx="132" cy="102" rx="7" ry="4.5" fill="#FF9E9E" opacity="0.6"/>
-          <!-- 小腳丫 -->
-          <ellipse cx="74" cy="182" rx="11" ry="6" fill="#F5A623"/>
-          <ellipse cx="106" cy="182" rx="11" ry="6" fill="#F5A623"/>
-        </g>
-      </svg>
-    `
+  /* ==================== 2. 溫暖繪本風森林動物插畫 ==================== */
+  const ANIMAL_ASSETS = {
+    bear:  { src: "assets/animal-bear.png",  alt: "繪本小熊" },
+    bunny: { src: "assets/animal-bunny.png", alt: "繪本小兔" },
+    fox:   { src: "assets/animal-fox.png",   alt: "繪本小狐狸" },
+    owl:   { src: "assets/animal-owl.png",   alt: "繪本小貓頭鷹" }
   };
+
+  function renderAnimalMarkup(key) {
+    const info = ANIMAL_ASSETS[key];
+    return `<img class="animal-img" src="${info.src}" alt="${info.alt}" draggable="false" />`;
+  }
+
+  // 預先載入四隻繪本動物，切換與過關零延遲
+  Object.values(ANIMAL_ASSETS).forEach((item) => {
+    const img = new Image();
+    img.src = item.src;
+  });
 
   const ANIMAL_PAIRS = [
     ["bear", "bunny"],
@@ -534,8 +435,8 @@
   function setStageAnimals() {
     const pair = ANIMAL_PAIRS[state.pairIndex % ANIMAL_PAIRS.length];
     state.pairIndex += 1;
-    el.animalLeftSvg.innerHTML = ANIMAL_SVGS[pair[0]];
-    el.animalRightSvg.innerHTML = ANIMAL_SVGS[pair[1]];
+    el.animalLeftSvg.innerHTML = renderAnimalMarkup(pair[0]);
+    el.animalRightSvg.innerHTML = renderAnimalMarkup(pair[1]);
   }
 
   function startGame() {
@@ -814,7 +715,7 @@
 
     // 顯示四隻小動物一起慶祝
     el.victoryAnimals.innerHTML = ["bear", "bunny", "fox", "owl"]
-      .map((key) => `<div class="victory-animal-item">${ANIMAL_SVGS[key]}</div>`)
+      .map((key) => `<div class="victory-animal-item">${renderAnimalMarkup(key)}</div>`)
       .join("");
 
     // 顯示本回合唸過的注音徽章
