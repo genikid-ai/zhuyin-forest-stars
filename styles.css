@@ -1,6 +1,6 @@
 /* ==========================================================================
-   森林小動物集星星・注音大挑戰
-   16:9 (1280x720) 滿版等比縮放設計 — 適用 65 吋電子白板與平板
+   注音符號 挑戰・森林小動物集星星（溫暖童趣繪本風）
+   Full-Bleed Fluid RWD — 自動適配 65 吋電子白板、平板與手機（直拿／橫拿皆可）
    ========================================================================== */
 
 :root {
@@ -10,17 +10,15 @@
 
   --ink-dark: #3B281B;
   --ink-muted: #6E523D;
-  --wood-border: #D99B52;
-  --wood-shadow: #B57632;
-  --cream-card: #FFFDF7;
+  --wood-border: #CE955A;
+  --wood-shadow: #A8713C;
+  --cream-card: #FFFDF8;
   --gold-main: #FFD447;
   --gold-deep: #F29F05;
   --green-btn: #49B85B;
   --green-btn-dark: #2E8F3E;
   --amber-btn: #FFB946;
   --amber-btn-dark: #D6871A;
-  --sky-btn: #59B4E8;
-  --sky-btn-dark: #2E86BA;
 }
 
 * {
@@ -37,49 +35,37 @@ body {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background: radial-gradient(circle at center, #6A8261 0%, #445940 100%);
+  background: #FFF9EA;
   font-family: var(--font-ui);
   color: var(--ink-dark);
   touch-action: manipulation;
 }
 
-/* 外層滿版置中容器 */
+/* 滿版外層與自適應繪本舞台 */
 .viewport {
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
+  width: 100%;
+  min-height: 100dvh;
   position: relative;
 }
 
-/* 16:9 虛擬畫布（1280 x 720），由 JS 計算 scale 等比縮放 */
 .stage {
-  width: 1280px;
-  height: 720px;
+  width: 100%;
+  height: 100dvh;
+  min-height: 100dvh;
   position: relative;
   overflow: hidden;
-  border-radius: 16px;
-  background: #FFF9EA;
-  box-shadow: 0 24px 70px rgba(42, 31, 18, 0.38);
-  transform-origin: center center;
-  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
 }
 
-/* 全螢幕或正好 16:9 時移除圓角 */
-.stage.is-exact-fit {
-  border-radius: 0;
-  box-shadow: none;
-}
-
-/* ==================== 溫暖繪本風森林背景 ==================== */
+/* ==================== 溫暖繪本風森林背景（全螢幕鋪滿無黑邊） ==================== */
 .forest-bg {
-  position: absolute;
+  position: fixed;
   inset: 0;
   pointer-events: none;
   z-index: 0;
   overflow: hidden;
+  background: linear-gradient(180deg, #E2F3F7 0%, #FFF9E8 58%, #DDEED1 100%);
 }
 
 .forest-bg-img {
@@ -88,32 +74,32 @@ body {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center center;
+  object-position: center bottom;
 }
 
 .sun-glow {
   position: absolute;
-  top: -90px;
+  top: -12vh;
   left: 50%;
   transform: translateX(-50%);
-  width: 820px;
-  height: 360px;
+  width: min(860px, 95vw);
+  height: 45vh;
   background: radial-gradient(ellipse at center, rgba(255, 246, 206, 0.42) 0%, rgba(255, 246, 206, 0) 70%);
 }
 
 .bg-sparkle {
   position: absolute;
   color: #E8B84B;
-  font-size: 20px;
+  font-size: clamp(14px, 1.6vw, 24px);
   opacity: 0.45;
   animation: twinkle 3.8s ease-in-out infinite;
 }
 
-.bg-sparkle.s1 { top: 82px; left: 320px; animation-delay: 0s; font-size: 18px; }
-.bg-sparkle.s2 { top: 64px; right: 340px; animation-delay: 0.9s; font-size: 22px; }
-.bg-sparkle.s3 { top: 182px; left: 108px; animation-delay: 1.5s; font-size: 16px; }
-.bg-sparkle.s4 { top: 205px; right: 98px; animation-delay: 2.1s; font-size: 20px; }
-.bg-sparkle.s5 { top: 132px; left: 610px; animation-delay: 2.7s; font-size: 14px; }
+.bg-sparkle.s1 { top: 11%; left: 24%; animation-delay: 0s; }
+.bg-sparkle.s2 { top: 9%; right: 25%; animation-delay: 0.9s; }
+.bg-sparkle.s3 { top: 24%; left: 8%; animation-delay: 1.5s; }
+.bg-sparkle.s4 { top: 26%; right: 8%; animation-delay: 2.1s; }
+.bg-sparkle.s5 { top: 18%; left: 48%; animation-delay: 2.7s; }
 
 @keyframes twinkle {
   0%, 100% { opacity: 0.22; transform: scale(0.85); }
@@ -121,16 +107,16 @@ body {
 }
 
 .confetti-canvas {
-  position: absolute;
+  position: fixed;
   inset: 0;
-  width: 1280px;
-  height: 720px;
+  width: 100vw;
+  height: 100dvh;
   pointer-events: none;
   z-index: 40;
 }
 
 .fx-layer {
-  position: absolute;
+  position: fixed;
   inset: 0;
   pointer-events: none;
   z-index: 45;
@@ -139,20 +125,22 @@ body {
 
 /* ==================== 畫面切換基礎 ==================== */
 .screen {
-  position: absolute;
-  inset: 0;
+  position: relative;
   z-index: 10;
+  flex: 1;
+  min-height: 0;
+  width: 100%;
   display: none;
   flex-direction: column;
 }
 
 .screen.active {
   display: flex;
-  animation: screenFadeIn 0.32s ease-out;
+  animation: screenFadeIn 0.3s ease-out;
 }
 
 @keyframes screenFadeIn {
-  from { opacity: 0; transform: scale(0.985); }
+  from { opacity: 0; transform: scale(0.99); }
   to { opacity: 1; transform: scale(1); }
 }
 
@@ -160,13 +148,13 @@ body {
 .top-utility-bar {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: clamp(6px, 0.8vw, 10px);
 }
 
 .home-utility {
   position: absolute;
-  top: 20px;
-  right: 24px;
+  top: clamp(12px, 2vh, 24px);
+  right: clamp(14px, 2vw, 28px);
   z-index: 20;
 }
 
@@ -175,24 +163,25 @@ body {
   align-items: center;
   justify-content: center;
   gap: 6px;
-  height: 46px;
-  padding: 0 15px;
+  height: clamp(38px, 3.6vw, 48px);
+  padding: 0 clamp(10px, 1.2vw, 16px);
   border-radius: 999px;
   border: 2.5px solid #E2C69E;
   background: rgba(255, 253, 247, 0.94);
   color: var(--ink-dark);
   font-family: var(--font-ui);
-  font-size: 16px;
+  font-size: clamp(13px, 1.15vw, 17px);
   font-weight: 700;
   cursor: pointer;
   box-shadow: 0 4px 0 #D4B284;
   transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.15s ease;
+  white-space: nowrap;
 }
 
 .util-btn.icon-only {
-  width: 48px;
+  width: clamp(38px, 3.6vw, 48px);
   padding: 0;
-  font-size: 20px;
+  font-size: clamp(16px, 1.5vw, 21px);
 }
 
 .util-btn:hover {
@@ -211,45 +200,46 @@ body {
 
 /* ==================== 畫面一：首頁 ==================== */
 .screen-home {
-  padding: 20px 36px 26px;
+  padding: clamp(14px, 2.2vh, 28px) clamp(14px, 3vw, 44px) clamp(6px, 1vh, 14px);
   justify-content: space-between;
   align-items: center;
+  gap: clamp(8px, 1.4vh, 18px);
 }
 
 .home-header {
   text-align: center;
-  margin-top: 2px;
+  padding: 0 clamp(10px, 10vw, 180px);
 }
 
 .home-badge {
   display: inline-block;
-  padding: 5px 20px;
+  padding: clamp(4px, 0.5vh, 6px) clamp(14px, 1.6vw, 22px);
   border-radius: 999px;
   background: #FFF2C2;
   border: 2px solid #F2C45A;
   color: #8A540E;
-  font-size: 17px;
+  font-size: clamp(14px, 1.3vw, 19px);
   font-weight: 800;
   letter-spacing: 1px;
-  margin-bottom: 6px;
+  margin-bottom: clamp(4px, 0.7vh, 8px);
 }
 
 .home-title {
-  font-size: 48px;
+  font-size: clamp(1.85rem, 3.6vw, 3.35rem);
   font-weight: 900;
   color: #3D2614;
-  letter-spacing: 3px;
+  letter-spacing: 2px;
   text-shadow: 0 3px 0 #FFFFFF, 0 5px 12px rgba(96, 61, 20, 0.14);
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  gap: clamp(6px, 1vw, 14px);
   line-height: 1.15;
 }
 
 .title-star {
   display: inline-block;
-  font-size: 42px;
+  font-size: 0.88em;
   animation: gentleTilt 2.8s ease-in-out infinite;
 }
 
@@ -263,38 +253,39 @@ body {
 }
 
 .home-subtitle {
-  margin-top: 6px;
-  font-size: 20px;
+  margin-top: clamp(4px, 0.7vh, 8px);
+  font-size: clamp(0.95rem, 1.45vw, 1.35rem);
   font-weight: 700;
   color: #5C4634;
 }
 
 /* 設定卡片主面板（溫暖水彩紙質感） */
 .home-panel {
-  width: 960px;
+  width: min(1020px, 100%);
   background: rgba(255, 252, 245, 0.91);
   backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   border: 4px solid #D3A067;
-  border-radius: 30px;
-  padding: 22px 30px 24px;
-  box-shadow: 0 11px 0 rgba(168, 118, 62, 0.26), 0 18px 34px rgba(74, 52, 33, 0.13);
+  border-radius: clamp(20px, 2.2vw, 30px);
+  padding: clamp(14px, 2.2vh, 26px) clamp(14px, 2.4vw, 32px);
+  box-shadow: 0 10px 0 rgba(168, 118, 62, 0.25), 0 18px 34px rgba(74, 52, 33, 0.13);
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: clamp(12px, 1.8vh, 20px);
 }
 
 .setting-heading {
-  font-size: 20px;
+  font-size: clamp(15px, 1.45vw, 21px);
   font-weight: 800;
   color: #7A4B1C;
-  margin-bottom: 10px;
+  margin-bottom: clamp(6px, 1vh, 10px);
   letter-spacing: 0.5px;
 }
 
 .scope-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 18px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(10px, 1.5vw, 20px);
 }
 
 .scope-card {
@@ -303,13 +294,13 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 16px 14px;
-  border-radius: 22px;
+  padding: clamp(10px, 1.6vh, 18px) clamp(8px, 1.2vw, 16px);
+  border-radius: clamp(16px, 1.6vw, 22px);
   border: 3.5px solid #E8D5B8;
   background: #FFFDF9;
   cursor: pointer;
   font-family: var(--font-ui);
-  box-shadow: 0 6px 0 #DFC6A1;
+  box-shadow: 0 5px 0 #DFC6A1;
   transition: transform 0.14s ease, border-color 0.15s ease, background 0.15s ease, box-shadow 0.14s ease;
 }
 
@@ -320,27 +311,27 @@ body {
 }
 
 .scope-card:active {
-  transform: translateY(4px);
+  transform: translateY(3px);
   box-shadow: 0 2px 0 #DFC6A1;
 }
 
 .scope-card.selected {
   border-color: #F29F05;
   background: linear-gradient(180deg, #FFF7D6 0%, #FFEBA8 100%);
-  box-shadow: 0 6px 0 #D98B04, 0 0 0 4px rgba(255, 206, 71, 0.35);
+  box-shadow: 0 5px 0 #D98B04, 0 0 0 4px rgba(255, 206, 71, 0.35);
 }
 
 .scope-card.selected::after {
   content: "✓";
   position: absolute;
-  top: 10px;
-  right: 12px;
-  width: 28px;
-  height: 28px;
+  top: 8px;
+  right: 10px;
+  width: clamp(22px, 2vw, 28px);
+  height: clamp(22px, 2vw, 28px);
   border-radius: 50%;
   background: #46B357;
   color: #FFFFFF;
-  font-size: 17px;
+  font-size: clamp(13px, 1.2vw, 17px);
   font-weight: 900;
   display: flex;
   align-items: center;
@@ -349,17 +340,17 @@ body {
 }
 
 .scope-tag {
-  font-size: 26px;
+  font-size: clamp(18px, 1.9vw, 27px);
   font-weight: 900;
   color: #3D2614;
 }
 
 .scope-range {
-  font-size: 32px;
+  font-size: clamp(22px, 2.4vw, 34px);
   font-weight: 900;
   color: #C7680E;
-  margin: 4px 0 2px;
-  letter-spacing: 3px;
+  margin: 2px 0;
+  letter-spacing: 2px;
 }
 
 body.font-kai .scope-range,
@@ -368,7 +359,7 @@ body.font-kai .mode-badge {
 }
 
 .scope-count {
-  font-size: 16px;
+  font-size: clamp(13px, 1.2vw, 17px);
   font-weight: 700;
   color: #7A5C43;
 }
@@ -376,26 +367,25 @@ body.font-kai .mode-badge {
 .setting-row {
   display: grid;
   grid-template-columns: 1.35fr 1fr;
-  gap: 20px;
+  gap: clamp(12px, 1.8vw, 22px);
   align-items: start;
 }
 
 .pill-group {
   display: flex;
-  gap: 10px;
-  flex-wrap: nowrap;
+  gap: clamp(6px, 0.9vw, 12px);
 }
 
 .pill-btn {
   flex: 1;
-  height: 54px;
-  padding: 0 12px;
+  min-height: clamp(44px, 6.2vh, 56px);
+  padding: 6px clamp(8px, 1vw, 14px);
   border-radius: 16px;
   border: 3px solid #E4D2B8;
   background: #FFFFFF;
   color: #5C4330;
   font-family: var(--font-ui);
-  font-size: 19px;
+  font-size: clamp(14px, 1.35vw, 20px);
   font-weight: 800;
   cursor: pointer;
   box-shadow: 0 4px 0 #DBC29D;
@@ -419,72 +409,64 @@ body.font-kai .mode-badge {
   box-shadow: 0 4px 0 #379445;
 }
 
-/* 首頁底部：開始按鈕與兩側迎賓動物 */
+/* 首頁底部：開始按鈕與兩側迎賓動物（純 Flex 彈性排列，永不重疊） */
 .home-footer {
-  width: 100%;
-  height: 152px;
+  width: min(1020px, 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative;
+  gap: clamp(18px, 4.5vw, 84px);
+  padding-bottom: clamp(2px, 0.5vh, 8px);
 }
 
 .btn-start {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 16px;
-  padding: 20px 66px;
+  gap: clamp(10px, 1.2vw, 18px);
+  padding: clamp(14px, 2.2vh, 22px) clamp(32px, 4.8vw, 70px);
   border-radius: 999px;
   border: 4px solid #FFFFFF;
   background: linear-gradient(180deg, #5FD16E 0%, #3BAE4E 100%);
   color: #FFFFFF;
   font-family: var(--font-ui);
-  font-size: 36px;
+  font-size: clamp(1.35rem, 2.5vw, 2.35rem);
   font-weight: 900;
   letter-spacing: 3px;
   cursor: pointer;
-  box-shadow: 0 9px 0 #267D35, 0 16px 28px rgba(38, 125, 53, 0.35);
+  box-shadow: 0 8px 0 #267D35, 0 16px 28px rgba(38, 125, 53, 0.34);
   transition: transform 0.13s ease, box-shadow 0.13s ease, filter 0.13s ease;
+  white-space: nowrap;
   z-index: 5;
 }
 
 .btn-start:hover {
   filter: brightness(1.04);
   transform: translateY(-2px);
-  box-shadow: 0 11px 0 #267D35, 0 20px 32px rgba(38, 125, 53, 0.38);
+  box-shadow: 0 10px 0 #267D35, 0 20px 32px rgba(38, 125, 53, 0.38);
 }
 
 .btn-start:active {
-  transform: translateY(6px);
+  transform: translateY(5px);
   box-shadow: 0 3px 0 #267D35, 0 6px 14px rgba(38, 125, 53, 0.3);
 }
 
 .btn-start-star {
-  font-size: 34px;
+  font-size: 0.95em;
 }
 
 .btn-start-arrow {
-  font-size: 28px;
+  font-size: 0.8em;
 }
 
 .home-animal {
-  position: absolute;
-  bottom: -4px;
-  width: 184px;
-  height: 184px;
+  width: clamp(110px, min(14vw, 21vh), 190px);
+  height: clamp(110px, min(14vw, 21vh), 190px);
   display: flex;
   align-items: flex-end;
   justify-content: center;
   pointer-events: none;
-}
-
-.home-animal-left {
-  left: 88px;
-}
-
-.home-animal-right {
-  right: 88px;
+  flex-shrink: 0;
 }
 
 /* ==================== 畫面二：遊戲主畫面 ==================== */
@@ -493,37 +475,39 @@ body.font-kai .mode-badge {
 }
 
 .game-topbar {
-  height: 86px;
-  padding: 14px 24px 8px;
+  width: 100%;
+  padding: clamp(10px, 1.6vh, 20px) clamp(14px, 2.2vw, 32px) clamp(4px, 0.8vh, 10px);
   display: grid;
-  grid-template-columns: 325px 1fr 325px;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  gap: 14px;
+  gap: clamp(8px, 1.4vw, 18px);
   z-index: 15;
 }
 
 .topbar-left {
   display: flex;
   align-items: center;
-  gap: 10px;
+  justify-self: start;
+  gap: clamp(6px, 0.8vw, 12px);
 }
 
 .home-nav-btn {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  height: 48px;
-  padding: 0 16px;
+  gap: 5px;
+  height: clamp(38px, 3.6vw, 48px);
+  padding: 0 clamp(10px, 1.3vw, 18px);
   border-radius: 999px;
   border: 2.5px solid #DFC299;
   background: rgba(255, 253, 247, 0.94);
   color: var(--ink-dark);
   font-family: var(--font-ui);
-  font-size: 18px;
+  font-size: clamp(14px, 1.3vw, 18px);
   font-weight: 800;
   cursor: pointer;
   box-shadow: 0 4px 0 #CCA97A;
   transition: transform 0.12s ease, box-shadow 0.12s ease;
+  white-space: nowrap;
 }
 
 .home-nav-btn:active {
@@ -532,12 +516,12 @@ body.font-kai .mode-badge {
 }
 
 .mode-badge {
-  padding: 8px 16px;
+  padding: clamp(5px, 0.7vh, 8px) clamp(10px, 1.3vw, 18px);
   border-radius: 999px;
   background: #FFF2C2;
   border: 2.5px solid #F0BA49;
   color: #7D4908;
-  font-size: 18px;
+  font-size: clamp(13px, 1.3vw, 19px);
   font-weight: 900;
   white-space: nowrap;
 }
@@ -547,29 +531,30 @@ body.font-kai .mode-badge {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 62px;
+  justify-self: center;
+  min-height: clamp(44px, 6vh, 64px);
 }
 
 .star-slots {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
-  padding: 8px 22px;
+  gap: clamp(6px, 1vw, 14px);
+  padding: clamp(5px, 0.8vh, 9px) clamp(12px, 1.8vw, 24px);
   border-radius: 999px;
-  background: rgba(255, 253, 247, 0.88);
+  background: rgba(255, 253, 247, 0.9);
   border: 3px solid #EAD1A7;
   box-shadow: 0 5px 14px rgba(96, 61, 20, 0.1);
 }
 
 .star-slots.many-stars {
-  gap: 6px;
-  padding: 8px 16px;
+  gap: clamp(3px, 0.5vw, 8px);
+  padding: clamp(5px, 0.8vh, 9px) clamp(10px, 1.4vw, 18px);
 }
 
 .star-slot {
-  width: 48px;
-  height: 48px;
+  width: clamp(32px, 3.6vw, 52px);
+  height: clamp(32px, 3.6vw, 52px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -577,8 +562,8 @@ body.font-kai .mode-badge {
 }
 
 .star-slots.many-stars .star-slot {
-  width: 38px;
-  height: 38px;
+  width: clamp(24px, 2.8vw, 40px);
+  height: clamp(24px, 2.8vw, 40px);
 }
 
 .star-slot svg {
@@ -612,11 +597,11 @@ body.font-kai .mode-badge {
 
 /* 超過 10 題時的星星進度條模式 */
 .star-meter {
-  width: 520px;
+  width: clamp(240px, 36vw, 520px);
   display: flex;
   align-items: center;
-  gap: 14px;
-  padding: 10px 20px;
+  gap: 12px;
+  padding: 8px 18px;
   border-radius: 999px;
   background: rgba(255, 253, 247, 0.92);
   border: 3px solid #EAD1A7;
@@ -624,7 +609,7 @@ body.font-kai .mode-badge {
 }
 
 .star-meter-icon {
-  font-size: 32px;
+  font-size: clamp(24px, 2.4vw, 34px);
   line-height: 1;
   transition: transform 0.3s ease;
 }
@@ -635,7 +620,7 @@ body.font-kai .mode-badge {
 
 .star-meter-track {
   flex: 1;
-  height: 24px;
+  height: clamp(18px, 2.4vh, 26px);
   border-radius: 999px;
   background: #EFE4CE;
   overflow: hidden;
@@ -655,28 +640,32 @@ body.font-kai .mode-badge {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 8px;
+  justify-self: end;
+  gap: clamp(5px, 0.65vw, 10px);
 }
 
 .progress-pill {
-  padding: 8px 14px;
+  padding: clamp(5px, 0.7vh, 8px) clamp(10px, 1.1vw, 16px);
   border-radius: 999px;
   background: rgba(255, 253, 247, 0.94);
   border: 2.5px solid #DFC299;
   color: #5C3D21;
-  font-size: 18px;
+  font-size: clamp(13px, 1.3vw, 19px);
   font-weight: 900;
   white-space: nowrap;
 }
 
-/* ==================== 中央主舞台：純注音大卡 + 左右小動物 ==================== */
+/* ==================== 中央主舞台：純注音大卡 + 左右繪本小動物 ==================== */
 .game-arena {
   flex: 1;
+  min-height: 0;
+  width: min(1360px, 100%);
+  margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 42px;
-  padding: 0 36px;
+  gap: clamp(16px, 3.6vw, 60px);
+  padding: 0 clamp(14px, 2.6vw, 44px);
   position: relative;
 }
 
@@ -686,17 +675,18 @@ body.font-kai .mode-badge {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
 
 .zhuyin-card {
-  width: 450px;
-  height: 400px;
-  border-radius: 44px;
+  width: clamp(270px, min(35vw, 56vh), 520px);
+  height: clamp(240px, min(31vw, 52vh), 460px);
+  border-radius: clamp(32px, 3.4vw, 48px);
   background: linear-gradient(180deg, #FFFDF8 0%, #FDF5E4 100%);
-  border: 10px solid #CE955A;
+  border: clamp(7px, 0.8vw, 11px) solid var(--wood-border);
   box-shadow:
     inset 0 0 0 5px #F6E6C9,
-    0 15px 0 #A8713C,
+    0 clamp(10px, 1.3vh, 16px) 0 var(--wood-shadow),
     0 24px 44px rgba(74, 52, 33, 0.22);
   display: flex;
   align-items: center;
@@ -708,19 +698,19 @@ body.font-kai .mode-badge {
 .card-corner-star {
   position: absolute;
   color: #E6B555;
-  font-size: 24px;
+  font-size: clamp(18px, 1.8vw, 26px);
   opacity: 0.85;
 }
 
-.card-corner-star.tl { top: 18px; left: 22px; }
-.card-corner-star.tr { top: 18px; right: 22px; }
-.card-corner-star.bl { bottom: 18px; left: 22px; }
-.card-corner-star.br { bottom: 18px; right: 22px; }
+.card-corner-star.tl { top: 14px; left: 18px; }
+.card-corner-star.tr { top: 14px; right: 18px; }
+.card-corner-star.bl { bottom: 14px; left: 18px; }
+.card-corner-star.br { bottom: 14px; right: 18px; }
 
-/* 超大純注音符號 — 65吋白板後排也清晰無比 */
+/* 超大純注音符號 — 65吋白板後排與手機皆清晰無比 */
 .zhuyin-symbol {
   font-family: var(--font-zhuyin-sans);
-  font-size: 258px;
+  font-size: clamp(148px, min(20vw, 33vh), 300px);
   font-weight: 900;
   line-height: 1;
   color: #3A2516;
@@ -749,13 +739,13 @@ body.font-kai .review-chip {
   border-color: #F5B425;
   box-shadow:
     inset 0 0 0 5px #FFF4C2,
-    0 16px 0 #CC8408,
+    0 15px 0 #CC8408,
     0 0 48px rgba(255, 212, 71, 0.78);
 }
 
 @keyframes cardCelebrate {
   0% { transform: scale(1); }
-  35% { transform: scale(1.07); }
+  35% { transform: scale(1.06); }
   100% { transform: scale(1); }
 }
 
@@ -769,22 +759,23 @@ body.font-kai .review-chip {
   65% { transform: translateX(10px) rotate(2deg); }
 }
 
-/* 卡片下方柔和小提示（例如「換下一個，等一下再來試！」） */
+/* 卡片下方柔和小提示 */
 .card-hint-toast {
   position: absolute;
   bottom: -44px;
-  padding: 6px 20px;
+  padding: 6px 18px;
   border-radius: 999px;
-  background: rgba(255, 248, 224, 0.96);
+  background: rgba(255, 248, 224, 0.97);
   border: 2px solid #EBC26C;
   color: #7D4E13;
-  font-size: 18px;
+  font-size: clamp(14px, 1.3vw, 19px);
   font-weight: 800;
   opacity: 0;
   transform: translateY(6px);
   transition: opacity 0.22s ease, transform 0.22s ease;
   pointer-events: none;
   white-space: nowrap;
+  z-index: 20;
 }
 
 .card-hint-toast.show {
@@ -794,18 +785,19 @@ body.font-kai .review-chip {
 
 /* 左右應援繪本小動物 */
 .stage-animal {
-  width: 265px;
-  height: 310px;
+  width: clamp(160px, min(21vw, 35vh), 300px);
+  height: clamp(190px, min(25vw, 41vh), 350px);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-end;
   position: relative;
+  flex-shrink: 0;
 }
 
 .animal-slot {
-  width: 255px;
-  height: 255px;
+  width: 100%;
+  height: 82%;
   display: flex;
   align-items: flex-end;
   justify-content: center;
@@ -838,9 +830,9 @@ body.font-kai .review-chip {
 
 @keyframes animalCheerJump {
   0% { transform: translateY(0) scale(1); }
-  30% { transform: translateY(-34px) scale(1.08) rotate(-4deg); }
+  30% { transform: translateY(-30px) scale(1.08) rotate(-4deg); }
   60% { transform: translateY(-10px) scale(1.03) rotate(4deg); }
-  80% { transform: translateY(-20px) scale(1.05); }
+  80% { transform: translateY(-18px) scale(1.05); }
   100% { transform: translateY(0) scale(1); }
 }
 
@@ -858,12 +850,12 @@ body.font-kai .review-chip {
 .animal-bubble {
   position: absolute;
   top: 0;
-  padding: 9px 18px;
+  padding: clamp(6px, 0.8vh, 10px) clamp(12px, 1.4vw, 20px);
   border-radius: 22px;
   background: #FFFFFF;
   border: 3px solid #F2BE4E;
   color: #6B3F0B;
-  font-size: 20px;
+  font-size: clamp(14px, 1.45vw, 21px);
   font-weight: 900;
   box-shadow: 0 6px 14px rgba(96, 61, 20, 0.14);
   opacity: 0;
@@ -871,6 +863,7 @@ body.font-kai .review-chip {
   transition: opacity 0.22s ease, transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
   white-space: nowrap;
   pointer-events: none;
+  z-index: 15;
 }
 
 .animal-bubble::after {
@@ -891,12 +884,13 @@ body.font-kai .review-chip {
 
 /* ==================== 下方老師操作控制區 ==================== */
 .game-controls {
-  height: 152px;
-  padding: 4px 40px 36px;
+  width: min(1060px, 100%);
+  margin: 0 auto;
+  padding: clamp(8px, 1.4vh, 16px) clamp(16px, 3vw, 40px) clamp(10px, 1.6vh, 20px);
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 36px;
+  gap: clamp(14px, 2.6vw, 36px);
   z-index: 15;
 }
 
@@ -904,8 +898,9 @@ body.font-kai .review-chip {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 18px;
-  border-radius: 28px;
+  gap: clamp(10px, 1.4vw, 18px);
+  padding: clamp(10px, 1.4vh, 16px) clamp(16px, 2vw, 28px);
+  border-radius: clamp(20px, 2vw, 28px);
   border: 4px solid #FFFFFF;
   cursor: pointer;
   font-family: var(--font-ui);
@@ -918,11 +913,11 @@ body.font-kai .review-chip {
 }
 
 .btn-retry {
-  width: 390px;
-  height: 100px;
+  flex: 0 1 400px;
+  min-height: clamp(72px, 11vh, 102px);
   background: linear-gradient(180deg, #FFC961 0%, #F2A72E 100%);
   color: #4D2A05;
-  box-shadow: 0 9px 0 #C77C14, 0 14px 24px rgba(153, 92, 10, 0.25);
+  box-shadow: 0 8px 0 #C77C14, 0 14px 24px rgba(153, 92, 10, 0.25);
 }
 
 .btn-retry:hover:not(:disabled) {
@@ -931,16 +926,16 @@ body.font-kai .review-chip {
 }
 
 .btn-retry:active:not(:disabled) {
-  transform: translateY(6px);
+  transform: translateY(5px);
   box-shadow: 0 3px 0 #C77C14;
 }
 
 .btn-correct {
-  width: 470px;
-  height: 108px;
+  flex: 0 1 480px;
+  min-height: clamp(78px, 12vh, 110px);
   background: linear-gradient(180deg, #5CD66E 0%, #37AB4B 100%);
   color: #FFFFFF;
-  box-shadow: 0 10px 0 #237A32, 0 16px 28px rgba(35, 122, 50, 0.34);
+  box-shadow: 0 9px 0 #237A32, 0 16px 28px rgba(35, 122, 50, 0.34);
 }
 
 .btn-correct:hover:not(:disabled) {
@@ -949,13 +944,14 @@ body.font-kai .review-chip {
 }
 
 .btn-correct:active:not(:disabled) {
-  transform: translateY(6px);
+  transform: translateY(5px);
   box-shadow: 0 3px 0 #237A32;
 }
 
 .ctrl-icon {
-  font-size: 42px;
+  font-size: clamp(28px, 3vw, 44px);
   line-height: 1;
+  flex-shrink: 0;
 }
 
 .ctrl-text {
@@ -966,39 +962,39 @@ body.font-kai .review-chip {
 }
 
 .ctrl-main {
-  font-size: 30px;
+  font-size: clamp(19px, 2.2vw, 31px);
   font-weight: 900;
-  letter-spacing: 1px;
+  letter-spacing: 0.5px;
   line-height: 1.15;
 }
 
 .btn-correct .ctrl-main {
-  font-size: 34px;
+  font-size: clamp(21px, 2.5vw, 35px);
 }
 
 .ctrl-sub {
-  font-size: 16px;
+  font-size: clamp(12px, 1.15vw, 17px);
   font-weight: 700;
-  opacity: 0.88;
+  opacity: 0.9;
   margin-top: 2px;
 }
 
 /* ==================== 飛星與閃光粒子 ==================== */
 .flying-star {
-  position: absolute;
-  width: 68px;
-  height: 68px;
-  margin-left: -34px;
-  margin-top: -34px;
+  position: fixed;
+  width: 60px;
+  height: 60px;
+  margin-left: -30px;
+  margin-top: -30px;
   pointer-events: none;
   filter: drop-shadow(0 0 16px rgba(255, 200, 36, 0.95));
   will-change: transform, left, top, opacity;
 }
 
 .sparkle-particle {
-  position: absolute;
-  width: 14px;
-  height: 14px;
+  position: fixed;
+  width: 13px;
+  height: 13px;
   border-radius: 50%;
   pointer-events: none;
   animation: burstOut 0.65s ease-out forwards;
@@ -1013,11 +1009,11 @@ body.font-kai .review-chip {
 .screen-victory {
   align-items: center;
   justify-content: center;
-  padding: 20px 40px;
+  padding: clamp(12px, 2vh, 28px) clamp(14px, 3vw, 40px);
 }
 
 .victory-content {
-  width: 1060px;
+  width: min(1040px, 100%);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1029,18 +1025,18 @@ body.font-kai .review-chip {
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  gap: 14px;
+  gap: 12px;
   margin-bottom: 4px;
 }
 
 .crown-star {
   display: inline-block;
-  font-size: 48px;
+  font-size: clamp(32px, 3.6vw, 52px);
   animation: crownBounce 1.8s ease-in-out infinite;
 }
 
 .crown-star.s-center {
-  font-size: 66px;
+  font-size: clamp(44px, 5vw, 70px);
   animation-delay: 0.2s;
 }
 
@@ -1054,15 +1050,15 @@ body.font-kai .review-chip {
 }
 
 .victory-title {
-  font-size: 46px;
+  font-size: clamp(1.75rem, 3.5vw, 3.1rem);
   font-weight: 900;
   color: #3D2614;
   text-shadow: 0 3px 0 #FFFFFF;
-  letter-spacing: 2px;
+  letter-spacing: 1.5px;
 }
 
 .victory-subtitle {
-  font-size: 22px;
+  font-size: clamp(0.95rem, 1.6vw, 1.45rem);
   font-weight: 700;
   color: #5F4531;
   margin-top: 4px;
@@ -1072,14 +1068,14 @@ body.font-kai .review-chip {
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  gap: 28px;
-  height: 164px;
-  margin: 10px 0 12px;
+  gap: clamp(10px, 2.2vw, 32px);
+  height: clamp(110px, 21vh, 178px);
+  margin: clamp(8px, 1.4vh, 16px) 0;
 }
 
 .victory-animal-item {
-  width: 162px;
-  height: 164px;
+  width: clamp(92px, min(14vw, 21vh), 172px);
+  height: 100%;
   display: flex;
   align-items: flex-end;
   justify-content: center;
@@ -1096,77 +1092,69 @@ body.font-kai .review-chip {
 
 @keyframes victoryJump {
   0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-14px); }
+  50% { transform: translateY(-12px); }
 }
 
 /* 本回合注音總覽 */
 .review-box {
-  width: 1000px;
-  background: rgba(255, 253, 247, 0.94);
-  border: 4px solid #E5B26B;
-  border-radius: 26px;
-  padding: 14px 22px 18px;
+  width: 100%;
+  background: rgba(255, 252, 245, 0.93);
+  backdrop-filter: blur(4px);
+  border: 4px solid #D3A067;
+  border-radius: clamp(18px, 2vw, 26px);
+  padding: clamp(12px, 1.6vh, 18px) clamp(12px, 1.8vw, 24px);
   box-shadow: 0 10px 24px rgba(64, 41, 18, 0.12);
 }
 
 .review-label {
-  font-size: 19px;
+  font-size: clamp(15px, 1.4vw, 20px);
   font-weight: 800;
   color: #7D4E13;
-  margin-bottom: 10px;
+  margin-bottom: clamp(8px, 1.1vh, 12px);
 }
 
 .review-chips {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 12px;
+  gap: clamp(8px, 1vw, 14px);
 }
 
 .review-chip {
-  min-width: 66px;
-  height: 66px;
-  padding: 0 10px;
-  border-radius: 18px;
+  min-width: clamp(50px, 5vw, 68px);
+  height: clamp(50px, 5vw, 68px);
+  padding: 0 8px;
+  border-radius: 16px;
   background: #FFF7D6;
   border: 3px solid #F0B843;
   color: #2E1F14;
   font-family: var(--font-zhuyin-sans);
-  font-size: 38px;
+  font-size: clamp(28px, 2.8vw, 40px);
   font-weight: 900;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  position: relative;
   box-shadow: 0 4px 0 #DB9D26;
 }
 
-.review-chip.practiced-extra {
-  background: #E8F8EA;
-  border-color: #58BF67;
-  box-shadow: 0 4px 0 #3D9C4C;
-}
-
-/* 10 題以上稍微縮小徽章 */
 .review-chips.medium {
-  gap: 9px;
+  gap: clamp(6px, 0.8vw, 10px);
 }
 .review-chips.medium .review-chip {
-  min-width: 56px;
-  height: 56px;
-  font-size: 32px;
+  min-width: clamp(44px, 4.3vw, 58px);
+  height: clamp(44px, 4.3vw, 58px);
+  font-size: clamp(24px, 2.4vw, 34px);
   border-radius: 14px;
 }
 
-/* 全部（18~37 題）緊湊排滿，絕不出現捲軸 */
 .review-chips.compact {
-  gap: 6px;
+  gap: clamp(5px, 0.55vw, 7px);
 }
 .review-chips.compact .review-chip {
-  min-width: 43px;
-  height: 43px;
+  min-width: clamp(36px, 3.3vw, 46px);
+  height: clamp(36px, 3.3vw, 46px);
   padding: 0 4px;
-  font-size: 24px;
+  font-size: clamp(19px, 1.85vw, 26px);
   border-radius: 11px;
   border-width: 2.5px;
   box-shadow: 0 3px 0 #DB9D26;
@@ -1177,57 +1165,60 @@ body.font-kai .review-chip {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 28px;
-  margin-top: 18px;
+  flex-wrap: wrap;
+  gap: clamp(12px, 2vw, 28px);
+  margin-top: clamp(12px, 2vh, 22px);
 }
 
 .victory-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
-  height: 76px;
-  padding: 0 46px;
+  gap: 10px;
+  min-height: clamp(56px, 8.2vh, 78px);
+  padding: 0 clamp(26px, 3.6vw, 48px);
   border-radius: 999px;
   border: 4px solid #FFFFFF;
   font-family: var(--font-ui);
-  font-size: 28px;
+  font-size: clamp(1.15rem, 2vw, 1.8rem);
   font-weight: 900;
   cursor: pointer;
   transition: transform 0.12s ease, box-shadow 0.12s ease;
+  white-space: nowrap;
 }
 
 .victory-btn.btn-again {
   background: linear-gradient(180deg, #5CD66E 0%, #37AB4B 100%);
   color: #FFFFFF;
-  box-shadow: 0 8px 0 #237A32, 0 14px 24px rgba(35, 122, 50, 0.3);
+  box-shadow: 0 7px 0 #237A32, 0 14px 24px rgba(35, 122, 50, 0.3);
 }
 
 .victory-btn.btn-again:active {
-  transform: translateY(5px);
+  transform: translateY(4px);
   box-shadow: 0 3px 0 #237A32;
 }
 
 .victory-btn.btn-home {
   background: linear-gradient(180deg, #FFCC66 0%, #F2A72E 100%);
   color: #4D2A05;
-  box-shadow: 0 8px 0 #C77C14, 0 14px 24px rgba(153, 92, 10, 0.24);
+  box-shadow: 0 7px 0 #C77C14, 0 14px 24px rgba(153, 92, 10, 0.24);
 }
 
 .victory-btn.btn-home:active {
-  transform: translateY(5px);
+  transform: translateY(4px);
   box-shadow: 0 3px 0 #C77C14;
 }
 
 /* ==================== 確認視窗（防誤觸回首頁） ==================== */
 .modal-overlay {
-  position: absolute;
+  position: fixed;
   inset: 0;
   z-index: 60;
   background: rgba(34, 48, 35, 0.52);
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 20px;
   backdrop-filter: blur(3px);
 }
 
@@ -1236,29 +1227,29 @@ body.font-kai .review-chip {
 }
 
 .modal-card {
-  width: 440px;
+  width: min(440px, 100%);
   background: #FFFDF7;
-  border: 5px solid #E5B26B;
-  border-radius: 32px;
-  padding: 28px 30px 26px;
+  border: 5px solid #D3A067;
+  border-radius: 30px;
+  padding: 26px 26px 24px;
   text-align: center;
   box-shadow: 0 18px 40px rgba(0, 0, 0, 0.28);
   animation: cardPopEnter 0.26s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .modal-icon {
-  font-size: 48px;
+  font-size: 46px;
   margin-bottom: 6px;
 }
 
 .modal-title {
-  font-size: 30px;
+  font-size: clamp(22px, 5vw, 30px);
   font-weight: 900;
   color: #3D2614;
 }
 
 .modal-desc {
-  font-size: 19px;
+  font-size: clamp(15px, 3.6vw, 19px);
   font-weight: 700;
   color: #705540;
   margin: 8px 0 22px;
@@ -1266,16 +1257,16 @@ body.font-kai .review-chip {
 
 .modal-actions {
   display: flex;
-  gap: 14px;
+  gap: 12px;
 }
 
 .modal-btn {
   flex: 1;
-  height: 58px;
+  height: 54px;
   border-radius: 18px;
   border: 3px solid #FFFFFF;
   font-family: var(--font-ui);
-  font-size: 21px;
+  font-size: clamp(17px, 4vw, 21px);
   font-weight: 900;
   cursor: pointer;
 }
@@ -1296,18 +1287,410 @@ body.font-kai .review-chip {
   transform: translateY(3px);
 }
 
-/* ==================== 底部版權宣告 ==================== */
+/* ==================== 底部版權宣告（永不遮擋按鈕） ==================== */
 .site-copyright {
-  position: absolute;
-  bottom: 7px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 25;
-  pointer-events: none;
-  font-size: 14px;
+  position: relative;
+  z-index: 20;
+  width: 100%;
+  text-align: center;
+  padding: 4px 12px 7px;
+  font-size: clamp(11px, 1.05vw, 14px);
   font-weight: 700;
   color: rgba(74, 52, 33, 0.85);
-  letter-spacing: 1.2px;
-  white-space: nowrap;
+  letter-spacing: 1px;
   text-shadow: 0 1px 3px rgba(255, 253, 245, 0.92);
+  pointer-events: none;
+  flex-shrink: 0;
+}
+
+/* ==========================================================================
+   響應式斷點 1：直立平板 & 手機（滿版重排、大按鈕、順暢捲動無黑邊）
+   ========================================================================== */
+@media (max-width: 960px) and (orientation: portrait), (max-width: 768px) {
+  html,
+  body {
+    height: auto;
+    min-height: 100dvh;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  .stage {
+    height: auto;
+    min-height: 100dvh;
+    overflow: visible;
+  }
+
+  /* ----- 首頁直式重排 ----- */
+  .screen-home {
+    justify-content: flex-start;
+    padding: 12px 16px 14px;
+    gap: 14px;
+  }
+
+  .home-utility {
+    position: static;
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .home-header {
+    padding: 0;
+  }
+
+  .home-title {
+    font-size: clamp(1.7rem, 7.2vw, 2.5rem);
+    letter-spacing: 1px;
+  }
+
+  .home-subtitle {
+    font-size: clamp(0.9rem, 3.6vw, 1.1rem);
+    line-height: 1.4;
+  }
+
+  .setting-row {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .pill-group {
+    flex-wrap: wrap;
+  }
+
+  .pill-btn {
+    min-height: 48px;
+    font-size: 16px;
+  }
+
+  .home-footer {
+    gap: 14px;
+    margin-top: 4px;
+  }
+
+  .home-animal {
+    width: clamp(78px, 20vw, 125px);
+    height: clamp(78px, 20vw, 125px);
+  }
+
+  .btn-start {
+    padding: 15px 28px;
+    font-size: clamp(1.25rem, 5.4vw, 1.65rem);
+    letter-spacing: 2px;
+  }
+
+  /* ----- 挑戰畫面直式重排（單屏內即可舒適操作） ----- */
+  .screen-game {
+    min-height: calc(100dvh - 30px);
+    justify-content: space-between;
+  }
+
+  .game-topbar {
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto;
+    row-gap: 10px;
+    column-gap: 8px;
+    padding: 10px 14px 4px;
+  }
+
+  .topbar-left {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .topbar-right {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .star-progress-wrap {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    width: 100%;
+    min-height: 44px;
+  }
+
+  .star-slots {
+    max-width: 100%;
+    padding: 6px 14px;
+    gap: 8px;
+  }
+
+  .star-slot {
+    width: clamp(28px, 8.5vw, 42px);
+    height: clamp(28px, 8.5vw, 42px);
+  }
+
+  .star-slots.many-stars {
+    gap: 3px;
+    padding: 6px 10px;
+  }
+
+  .star-slots.many-stars .star-slot {
+    width: clamp(22px, 6.8vw, 32px);
+    height: clamp(22px, 6.8vw, 32px);
+  }
+
+  .star-meter {
+    width: min(460px, 94vw);
+  }
+
+  .game-arena {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "card card"
+      "left right";
+    justify-items: center;
+    align-items: end;
+    gap: 10px 16px;
+    padding: 8px 16px 4px;
+  }
+
+  .zhuyin-card-wrap {
+    grid-area: card;
+    width: 100%;
+  }
+
+  .zhuyin-card {
+    width: min(82vw, 360px);
+    height: clamp(205px, 33dvh, 300px);
+    border-radius: 34px;
+    border-width: 8px;
+  }
+
+  .zhuyin-symbol {
+    font-size: clamp(136px, min(36vw, 23dvh), 210px);
+  }
+
+  .card-hint-toast {
+    bottom: -36px;
+    font-size: 14px;
+    padding: 5px 14px;
+  }
+
+  .stage-animal-left {
+    grid-area: left;
+    justify-self: end;
+  }
+
+  .stage-animal-right {
+    grid-area: right;
+    justify-self: start;
+  }
+
+  .stage-animal {
+    width: clamp(112px, 34vw, 170px);
+    height: clamp(118px, 18dvh, 175px);
+  }
+
+  .animal-slot {
+    height: 82%;
+  }
+
+  .animal-bubble {
+    font-size: 14px;
+    padding: 5px 12px;
+    top: -4px;
+  }
+
+  .game-controls {
+    padding: 10px 16px 10px;
+    gap: 12px;
+  }
+
+  .btn-retry,
+  .btn-correct {
+    flex: 1;
+    min-height: 76px;
+    padding: 10px 14px;
+    border-radius: 22px;
+  }
+
+  .ctrl-icon {
+    font-size: 28px;
+  }
+
+  .ctrl-main,
+  .btn-correct .ctrl-main {
+    font-size: 19px;
+  }
+
+  .ctrl-sub {
+    font-size: 12px;
+  }
+
+  /* ----- 過關畫面直式重排 ----- */
+  .screen-victory {
+    padding: 16px 14px 12px;
+  }
+
+  .victory-animals {
+    height: clamp(86px, 16vh, 130px);
+    gap: 8px;
+  }
+
+  .victory-animal-item {
+    width: clamp(68px, 21vw, 118px);
+  }
+}
+
+/* ==========================================================================
+   響應式斷點 2：窄螢幕手機（<= 560px）單手拇指友善排版
+   ========================================================================== */
+@media (max-width: 560px) {
+  .util-btn {
+    height: 36px;
+    padding: 0 10px;
+    font-size: 13px;
+  }
+
+  .util-btn.icon-only {
+    width: 36px;
+    height: 36px;
+    font-size: 16px;
+  }
+
+  /* 手機上範圍改為橫向大卡片，一眼看清且超好點 */
+  .scope-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .scope-card {
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 12px 42px 12px 18px;
+    border-radius: 18px;
+  }
+
+  .scope-card.selected::after {
+    top: 50%;
+    right: 12px;
+    transform: translateY(-50%);
+  }
+
+  .scope-tag {
+    font-size: 20px;
+  }
+
+  .scope-range {
+    font-size: 24px;
+    margin: 0;
+  }
+
+  .scope-count {
+    font-size: 13px;
+  }
+
+  .home-footer {
+    flex-wrap: wrap;
+    row-gap: 10px;
+  }
+
+  .home-animal-left {
+    order: 1;
+  }
+
+  .home-animal-right {
+    order: 2;
+  }
+
+  .btn-start {
+    order: 3;
+    width: 100%;
+    padding: 16px 24px;
+    font-size: 24px;
+  }
+
+  .home-nav-btn {
+    height: 36px;
+    padding: 0 10px;
+    font-size: 13px;
+  }
+
+  .mode-badge,
+  .progress-pill {
+    font-size: 13px;
+    padding: 5px 10px;
+  }
+
+  /* 手機挑戰按鈕上下堆疊：主要「唸對了！得星星」置頂、超寬好按 */
+  .game-controls {
+    flex-direction: column;
+    gap: 10px;
+    padding: 8px 16px 8px;
+  }
+
+  .btn-correct {
+    order: -1;
+    width: 100%;
+    flex: none;
+    min-height: 70px;
+  }
+
+  .btn-retry {
+    width: 100%;
+    flex: none;
+    min-height: 58px;
+  }
+
+  .btn-correct .ctrl-main {
+    font-size: 22px;
+  }
+
+  .btn-retry .ctrl-main {
+    font-size: 18px;
+  }
+
+  .victory-actions {
+    width: 100%;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .victory-btn {
+    width: 100%;
+    min-height: 56px;
+  }
+}
+
+/* ==========================================================================
+   響應式斷點 3：手機橫拿（螢幕高度較矮時允許流暢捲動不裁切）
+   ========================================================================== */
+@media (max-height: 540px) and (orientation: landscape) {
+  html,
+  body {
+    height: auto;
+    min-height: 100dvh;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  .stage {
+    height: auto;
+    min-height: 100dvh;
+    overflow: visible;
+  }
+
+  .zhuyin-card {
+    width: 240px;
+    height: 210px;
+  }
+
+  .zhuyin-symbol {
+    font-size: 132px;
+  }
+
+  .stage-animal {
+    width: 145px;
+    height: 170px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
