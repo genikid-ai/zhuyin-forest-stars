@@ -155,8 +155,7 @@
     earnedStars: 0,
     completedSymbols: [],  // 本輪依序唸對的注音
     skippedSymbols: new Set(), // 本輪換掉的注音（不重複出現）
-    isAnimating: false,
-    currentScale: 1
+    isAnimating: false
   };
 
   /* ==================== 5. DOM 參照 ==================== */
@@ -211,23 +210,17 @@
     btnFontGame: document.getElementById("btn-font-game")
   };
 
-  /* ==================== 6. 16:9 等比縮放引擎 ==================== */
-  function updateStageScale() {
+  /* ==================== 6. 響應式畫布尺寸管理 ==================== */
+  function syncCanvasSize() {
     const vw = window.innerWidth;
     const vh = window.innerHeight;
-    const scale = Math.min(vw / 1280, vh / 720);
-    state.currentScale = scale;
-    el.stage.style.transform = `scale(${scale})`;
-
-    // 若螢幕比例非常接近 16:9（如 65 吋白板），貼齊滿版去圓角
-    const ratio = vw / vh;
-    const isExact169 = Math.abs(ratio - 16 / 9) < 0.04;
-    el.stage.classList.toggle("is-exact-fit", isExact169);
+    el.confettiCanvas.width = vw;
+    el.confettiCanvas.height = vh;
   }
 
-  window.addEventListener("resize", updateStageScale);
-  window.addEventListener("orientationchange", () => setTimeout(updateStageScale, 120));
-  document.addEventListener("fullscreenchange", () => setTimeout(updateStageScale, 80));
+  window.addEventListener("resize", syncCanvasSize);
+  window.addEventListener("orientationchange", () => setTimeout(syncCanvasSize, 120));
+  document.addEventListener("fullscreenchange", () => setTimeout(syncCanvasSize, 80));
 
   /* ==================== 7. 介面切換與工具列 ==================== */
   function showScreen(name) {
@@ -235,6 +228,7 @@
     el.screenHome.classList.toggle("active", name === "home");
     el.screenGame.classList.toggle("active", name === "game");
     el.screenVictory.classList.toggle("active", name === "victory");
+    window.scrollTo({ top: 0, behavior: "instant" });
 
     if (name !== "victory") {
       stopConfetti();
@@ -522,12 +516,10 @@
 
   /* ==================== 10. 飛星與閃光特效 ==================== */
   function getStagePoint(element) {
-    const stageRect = el.stage.getBoundingClientRect();
     const rect = element.getBoundingClientRect();
-    const s = state.currentScale || 1;
     return {
-      x: (rect.left + rect.width / 2 - stageRect.left) / s,
-      y: (rect.top + rect.height / 2 - stageRect.top) / s
+      x: rect.left + rect.width / 2,
+      y: rect.top + rect.height / 2
     };
   }
 
@@ -537,7 +529,7 @@
       const p = document.createElement("div");
       p.className = "sparkle-particle";
       const angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.4;
-      const dist = 34 + Math.random() * 44;
+      const dist = 28 + Math.random() * 40;
       p.style.left = `${x}px`;
       p.style.top = `${y}px`;
       p.style.background = colors[i % colors.length];
@@ -556,12 +548,12 @@
     } else {
       targetEl = document.getElementById("star-meter-icon");
     }
-    const end = targetEl ? getStagePoint(targetEl) : { x: 640, y: 46 };
+    const end = targetEl ? getStagePoint(targetEl) : { x: window.innerWidth / 2, y: 46 };
 
     const star = document.createElement("div");
     star.className = "flying-star";
     star.innerHTML = `
-      <svg viewBox="0 0 64 64" width="68" height="68">
+      <svg viewBox="0 0 64 64" width="60" height="60">
         <polygon points="32,4 40,22 60,25 45,39 49,58 32,48 15,58 19,39 4,25 24,22"
           fill="#FFD447" stroke="#EB8F00" stroke-width="3" stroke-linejoin="round"/>
       </svg>
@@ -570,9 +562,11 @@
     star.style.top = `${start.y}px`;
     el.fxLayer.appendChild(star);
 
-    // 拋物線控制點
-    const ctrlX = (start.x + end.x) / 2 + (end.x >= start.x ? 60 : -60);
-    const ctrlY = Math.min(start.y, end.y) - 95;
+    // 拋物線控制點（依螢幕比例自適應）
+    const curveLift = Math.min(95, window.innerHeight * 0.14);
+    const curveSide = Math.min(60, window.innerWidth * 0.1);
+    const ctrlX = (start.x + end.x) / 2 + (end.x >= start.x ? curveSide : -curveSide);
+    const ctrlY = Math.min(start.y, end.y) - curveLift;
     const duration = 520;
     const startTime = performance.now();
 
@@ -744,29 +738,35 @@
 
   function startConfetti() {
     stopConfetti();
+    syncCanvasSize();
+    const w = el.confettiCanvas.width;
+    const h = el.confettiCanvas.height;
     const ctx = el.confettiCanvas.getContext("2d");
     const colors = ["#FFD447", "#FF7B9C", "#5FD16E", "#67C8FF", "#FFAA4C", "#C59BFF"];
-    confettiPieces = Array.from({ length: 85 }, () => ({
-      x: Math.random() * 1280,
-      y: -20 - Math.random() * 420,
-      w: 10 + Math.random() * 9,
-      h: 6 + Math.random() * 6,
+    const pieceCount = w < 640 ? 55 : 85;
+    confettiPieces = Array.from({ length: pieceCount }, () => ({
+      x: Math.random() * w,
+      y: -20 - Math.random() * Math.max(320, h * 0.6),
+      w: 9 + Math.random() * 8,
+      h: 5 + Math.random() * 6,
       vx: (Math.random() - 0.5) * 2.2,
-      vy: 2.1 + Math.random() * 2.8,
+      vy: 2.0 + Math.random() * 2.6,
       rot: Math.random() * Math.PI * 2,
       vrot: (Math.random() - 0.5) * 0.14,
       color: colors[Math.floor(Math.random() * colors.length)]
     }));
 
     function draw() {
-      ctx.clearRect(0, 0, 1280, 720);
+      const cw = el.confettiCanvas.width;
+      const ch = el.confettiCanvas.height;
+      ctx.clearRect(0, 0, cw, ch);
       for (const p of confettiPieces) {
         p.x += p.vx;
         p.y += p.vy;
         p.rot += p.vrot;
-        if (p.y > 740) {
+        if (p.y > ch + 20) {
           p.y = -20;
-          p.x = Math.random() * 1280;
+          p.x = Math.random() * cw;
         }
         ctx.save();
         ctx.translate(p.x, p.y);
@@ -787,7 +787,7 @@
       confettiReqId = null;
     }
     const ctx = el.confettiCanvas.getContext("2d");
-    ctx.clearRect(0, 0, 1280, 720);
+    ctx.clearRect(0, 0, el.confettiCanvas.width, el.confettiCanvas.height);
   }
 
   /* ==================== 13. 返回首頁防誤觸視窗 ==================== */
@@ -863,5 +863,5 @@
 
   /* ==================== 15. 初始啟動 ==================== */
   updateCountAllLabel();
-  updateStageScale();
+  syncCanvasSize();
 })();
