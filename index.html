@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body class="font-sans">
-  <!-- 全螢幕背景容器（自動等比縮放 16:9 舞台） -->
+  <!-- 全螢幕響應式繪本舞台（自動適配 65 吋電子白板、平板與手機） -->
   <div id="viewport" class="viewport">
     <div id="stage" class="stage" role="application" aria-label="森林小動物集星星注音小遊戲">
 
@@ -25,7 +25,7 @@
       </div>
 
       <!-- 彩帶煙火 Canvas（過關時使用） -->
-      <canvas id="confetti-canvas" class="confetti-canvas" width="1280" height="720"></canvas>
+      <canvas id="confetti-canvas" class="confetti-canvas"></canvas>
 
       <!-- 飛星動畫層 -->
       <div id="fx-layer" class="fx-layer" aria-hidden="true"></div>
@@ -250,7 +250,7 @@
       </div>
 
       <!-- 底部版權宣告 -->
-      <div class="site-copyright">© 傑尼爾教育文化事業集團 版權所有</div>
+      <footer class="site-copyright">© 傑尼爾教育文化事業集團 版權所有</footer>
 
     </div>
   </div>
